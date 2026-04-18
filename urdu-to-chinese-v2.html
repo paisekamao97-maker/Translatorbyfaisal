@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="ur">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="آواز">
+<title>آواز</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Nastaliq+Urdu:wght@400;600&family=Noto+Sans+SC:wght@300;400;700&family=Instrument+Serif:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:    #efece5;
+  --s1:    #cfd2f3;
+  --s2:    #f4d3d3;
+  --s3:    #c6f0e2;
+  --rim:   #7b7d90;
+  --rim2:  #464750;
+  --gold:  #c9973a;
+  --goldf: #e8be6a;
+  --goldd: #7a5a18;
+  --jade:  #3ec98a;
+  --red:   #e05555;
+  --lav:   #000000;
+  --lavf:  #0e0a30;
+  --text:  #2c0202;
+  --text2: #302300;
+  --text3: #000432;
+}
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;user-select:none;}
+html,body{height:100%;height:-webkit-fill-available;background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;overflow:hidden;}
+
+/* ══ SETUP ══ */
+#setup{position:fixed;inset:0;z-index:999;background:var(--bg);display:flex;flex-direction:column;overflow-y:auto;-webkit-overflow-scrolling:touch;}
+.setup-inner{flex:1;display:flex;flex-direction:column;align-items:center;padding:0 22px;padding-top:max(env(safe-area-inset-top,0px),48px);padding-bottom:max(env(safe-area-inset-bottom,0px),40px);}
+.logo-ring{width:90px;height:90px;border-radius:50%;border:1px solid var(--rim2);background:radial-gradient(circle at 38% 38%,var(--s3),var(--s1));display:flex;align-items:center;justify-content:center;font-size:38px;margin-bottom:20px;box-shadow:0 0 60px rgba(142,130,224,0.14);}
+.setup-eyebrow{font-size:10px;letter-spacing:0.28em;color:var(--text3);text-transform:uppercase;margin-bottom:6px;}
+.setup-title{font-family:'Instrument Serif',serif;font-size:32px;color:var(--text);margin-bottom:6px;}
+.setup-sub{display:flex;align-items:center;gap:8px;margin-bottom:32px;}
+.s-ur{font-family:'Noto Nastaliq Urdu',serif;font-size:17px;color:var(--lav);}
+.s-arr{color:var(--text3);font-size:12px;}
+.s-zh{font-family:'Noto Sans SC',sans-serif;font-size:17px;color:var(--gold);font-weight:500;}
+.steps-card{width:100%;background:var(--s1);border:0.5px solid var(--rim);border-radius:20px;overflow:hidden;margin-bottom:12px;}
+.steps-head{padding:13px 18px;border-bottom:0.5px solid var(--rim);font-size:10px;letter-spacing:0.2em;color:var(--text3);text-transform:uppercase;display:flex;align-items:center;gap:8px;}
+.free-pill{background:rgba(62,201,138,0.12);border:0.5px solid rgba(62,201,138,0.3);border-radius:20px;padding:2px 9px;font-size:9px;color:var(--jade);letter-spacing:0.1em;}
+.step-row{display:flex;gap:13px;align-items:flex-start;padding:13px 18px;border-bottom:0.5px solid var(--rim);}
+.step-row:last-child{border-bottom:none;}
+.step-n{width:22px;height:22px;border-radius:50%;background:var(--s2);border:0.5px solid var(--rim2);font-size:10px;color:var(--gold);display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;font-weight:500;}
+.step-text{font-size:13px;color:var(--text2);line-height:1.65;}
+.step-text a{color:var(--goldf);text-decoration:none;font-weight:500;}
+.step-text strong{color:var(--text);font-weight:500;}
+.key-card{width:100%;background:var(--s1);border:0.5px solid var(--rim);border-radius:20px;padding:18px;margin-bottom:12px;}
+.key-label{font-size:10px;letter-spacing:0.2em;color:var(--text3);text-transform:uppercase;margin-bottom:11px;}
+.key-field{position:relative;display:flex;align-items:center;}
+.key-input{width:100%;background:var(--s2);border:0.5px solid var(--rim2);border-radius:12px;padding:14px 48px 14px 16px;font-family:'DM Sans',monospace;font-size:13px;color:var(--text);outline:none;-webkit-appearance:none;appearance:none;transition:border-color 0.2s;}
+.key-input::placeholder{color:var(--text3);}
+.key-input:focus{border-color:var(--goldd);}
+.eye-btn{position:absolute;right:14px;background:none;border:none;color:var(--text3);font-size:17px;cursor:pointer;padding:4px;line-height:1;}
+.cta{width:100%;padding:17px;background:var(--gold);border:none;border-radius:14px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;letter-spacing:0.12em;text-transform:uppercase;color:#07080f;cursor:pointer;transition:opacity 0.15s,transform 0.1s;margin-bottom:16px;}
+.cta:disabled{opacity:0.28;cursor:not-allowed;transform:none!important;}
+.cta:active{transform:scale(0.97);opacity:0.9;}
+.setup-note{font-size:11px;color:var(--text3);text-align:center;line-height:1.85;letter-spacing:0.03em;}
+
+/* ══ APP ══ */
+#app{display:none;flex-direction:column;height:100%;height:-webkit-fill-available;}
+
+/* topbar */
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:max(env(safe-area-inset-top,0px),16px) 20px 14px;border-bottom:0.5px solid var(--rim);flex-shrink:0;}
+.tb-brand{display:flex;flex-direction:column;gap:3px;}
+.tb-name{font-family:'Instrument Serif',serif;font-size:22px;color:var(--text);}
+.tb-pair{display:flex;align-items:center;gap:5px;}
+.tb-ur{font-family:'Noto Nastaliq Urdu',serif;font-size:12px;color:var(--lav);}
+.tb-arr{font-size:9px;color:var(--text3);}
+.tb-zh{font-family:'Noto Sans SC',sans-serif;font-size:12px;color:var(--gold);}
+.gear-btn{width:36px;height:36px;border-radius:50%;background:var(--s1);border:0.5px solid var(--rim);display:flex;align-items:center;justify-content:center;font-size:16px;cursor:pointer;color:var(--text3);transition:all 0.15s;}
+.gear-btn:active{transform:scale(0.88);}
+
+/* history */
+.history{flex:1;overflow-y:auto;overflow-x:hidden;padding:16px 16px 8px;display:flex;flex-direction:column;gap:16px;-webkit-overflow-scrolling:touch;}
+.history::-webkit-scrollbar{display:none;}
+
+/* empty */
+.empty{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;padding:40px 16px;}
+.empty-orb{width:96px;height:96px;border-radius:50%;background:var(--s1);border:1px solid var(--rim);display:flex;align-items:center;justify-content:center;font-size:40px;box-shadow:0 0 80px rgba(142,130,224,0.07);}
+.empty-title{font-family:'Instrument Serif',serif;font-size:26px;color:var(--text2);text-align:center;}
+.empty-hint{font-size:12px;color:var(--text3);text-align:center;line-height:2;letter-spacing:0.04em;}
+
+/* ── LIVE PANEL (shown while recording + processing) ── */
+.live-panel{
+  margin:0 16px 8px;
+  background:var(--s1);border:0.5px solid var(--rim2);
+  border-radius:20px;overflow:hidden;
+  display:none;flex-direction:column;
+}
+.live-panel.show{display:flex;}
+
+.live-rec-row{
+  display:flex;align-items:center;gap:10px;
+  padding:12px 16px;border-bottom:0.5px solid var(--rim);
+}
+.live-rec-dot{width:8px;height:8px;border-radius:50%;background:var(--red);animation:blink 0.8s infinite;flex-shrink:0;}
+.live-rec-label{font-size:10px;letter-spacing:0.18em;color:var(--text3);text-transform:uppercase;flex:1;}
+.waveform{display:flex;align-items:center;gap:2px;height:18px;}
+.wv{width:3px;border-radius:3px;background:var(--red);opacity:0.6;}
+.wv:nth-child(1){animation:wave 0.9s 0.0s infinite ease-in-out;}
+.wv:nth-child(2){animation:wave 0.9s 0.1s infinite ease-in-out;}
+.wv:nth-child(3){animation:wave 0.9s 0.2s infinite ease-in-out;}
+.wv:nth-child(4){animation:wave 0.9s 0.3s infinite ease-in-out;}
+.wv:nth-child(5){animation:wave 0.9s 0.15s infinite ease-in-out;}
+.wv:nth-child(6){animation:wave 0.9s 0.05s infinite ease-in-out;}
+@keyframes wave{0%,100%{height:4px}50%{height:16px}}
+
+.live-urdu-row{padding:12px 16px;border-bottom:0.5px solid var(--rim);min-height:56px;display:none;}
+.live-urdu-row.show{display:block;}
+.live-tag{font-size:9px;letter-spacing:0.18em;color:var(--text3);text-transform:uppercase;margin-bottom:5px;display:flex;align-items:center;gap:5px;}
+.ltag-dot{width:5px;height:5px;border-radius:50%;}
+.ltag-dot.ur{background:var(--lav);}
+.ltag-dot.zh{background:var(--gold);}
+.live-urdu-text{font-family:'Noto Nastaliq Urdu',serif;font-size:20px;color:var(--lavf);direction:rtl;line-height:2.1;}
+
+.live-zh-row{padding:12px 16px;min-height:52px;display:none;}
+.live-zh-row.show{display:block;}
+.live-zh-text{font-family:'Noto Sans SC',sans-serif;font-size:22px;color:var(--text2);line-height:1.5;letter-spacing:0.02em;}
+
+/* ── BUBBLE ── */
+.bubble{animation:riseUp 0.35s cubic-bezier(0.2,0,0,1);}
+@keyframes riseUp{from{opacity:0;transform:translateY(14px) scale(0.98);}to{opacity:1;transform:translateY(0) scale(1);}}
+
+.bubble-card{background:var(--s1);border:0.5px solid var(--rim);border-radius:20px;overflow:hidden;transition:border-color 0.3s,box-shadow 0.3s;}
+.bubble-card.speaking{border-color:var(--goldd);box-shadow:0 0 0 1px var(--goldd),0 0 30px rgba(201,151,58,0.1);}
+
+.b-ur-sec{padding:15px 17px 13px;border-bottom:0.5px solid var(--rim);}
+.b-tag{font-size:9px;letter-spacing:0.18em;color:var(--text3);text-transform:uppercase;margin-bottom:6px;display:flex;align-items:center;gap:5px;}
+.b-dot{width:5px;height:5px;border-radius:50%;}
+.b-dot.ur{background:var(--lav);}
+.b-dot.zh{background:var(--gold);}
+.b-ur-text{font-family:'Noto Nastaliq Urdu',serif;font-size:21px;color:var(--lavf);direction:rtl;line-height:2.1;}
+
+.b-zh-sec{padding:13px 17px 15px;display:flex;align-items:flex-end;justify-content:space-between;gap:12px;}
+.b-zh-main{flex:1;}
+
+/* Chinese text with per-char spans for highlight */
+.b-zh-text{font-family:'Noto Sans SC',sans-serif;font-size:26px;color:var(--text);line-height:1.45;letter-spacing:0.03em;font-weight:300;}
+.zh-char{display:inline;transition:color 0.15s,text-shadow 0.15s;}
+.zh-char.lit{color:var(--goldf);text-shadow:0 0 20px rgba(232,190,106,0.5);}
+
+.spk-btn{width:42px;height:42px;border-radius:50%;background:var(--s2);border:0.5px solid var(--rim2);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:15px;color:var(--text3);flex-shrink:0;transition:all 0.2s;align-self:flex-end;}
+.spk-btn:active{transform:scale(0.88);}
+.spk-btn.on{background:rgba(201,151,58,0.12);border-color:var(--gold);color:var(--gold);}
+
+.b-foot{padding:0 17px 12px;font-size:10px;color:var(--text3);}
+
+/* ── STATUS BAR ── */
+.statusbar{margin:4px 16px 6px;background:var(--s1);border:0.5px solid var(--rim);border-radius:12px;padding:11px 15px;display:flex;align-items:center;gap:10px;flex-shrink:0;}
+.sdot{width:8px;height:8px;border-radius:50%;background:var(--rim2);flex-shrink:0;transition:background 0.2s;}
+.sdot.rec{background:var(--red);animation:blink 0.9s infinite;}
+.sdot.proc{background:var(--gold);animation:blink 0.5s infinite;}
+.sdot.ok{background:var(--jade);}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0.15}}
+.smsg{font-size:12px;color:var(--text2);letter-spacing:0.04em;flex:1;}
+
+/* error */
+.errbox{margin:0 16px 4px;background:rgba(224,85,85,0.08);border:0.5px solid rgba(224,85,85,0.25);border-radius:12px;padding:11px 14px;font-size:12px;color:var(--red);line-height:1.6;display:none;}
+.errbox.show{display:block;}
+
+/* install */
+.install-banner{margin:0 16px 6px;background:rgba(201,151,58,0.08);border:0.5px solid rgba(201,151,58,0.22);border-radius:12px;padding:11px 15px;font-size:12px;color:var(--text2);line-height:1.7;display:none;}
+.install-banner.show{display:block;}
+.install-banner strong{color:var(--goldf);font-weight:500;}
+
+/* ── CONTROLS ── */
+.controls{padding:12px 28px;padding-bottom:max(env(safe-area-inset-bottom,0px),18px);display:flex;align-items:center;justify-content:center;gap:26px;flex-shrink:0;}
+.ctrl-btn{width:50px;height:50px;border-radius:50%;background:var(--s1);border:0.5px solid var(--rim);display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--text3);font-size:18px;transition:all 0.15s;}
+.ctrl-btn:active{transform:scale(0.88);}
+.mic-wrap{display:flex;flex-direction:column;align-items:center;gap:9px;}
+.mic-btn{width:84px;height:84px;border-radius:50%;background:var(--s2);border:1.5px solid var(--rim2);display:flex;align-items:center;justify-content:center;cursor:pointer;outline:none;-webkit-appearance:none;transition:all 0.2s;position:relative;}
+.mic-svg{width:32px;height:32px;fill:var(--text3);transition:fill 0.2s;}
+.mic-btn:hover{border-color:var(--lav);}
+.mic-btn:hover .mic-svg{fill:var(--lav);}
+.mic-btn.rec{background:rgba(224,85,85,0.1);border-color:var(--red);animation:pulse 1.6s infinite;}
+.mic-btn.rec .mic-svg{fill:var(--red);}
+.mic-btn.proc{border-color:var(--goldd);}
+.mic-btn.proc .mic-svg{fill:var(--gold);}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(224,85,85,0.35);}60%{box-shadow:0 0 0 20px rgba(224,85,85,0);}100%{box-shadow:0 0 0 0 rgba(224,85,85,0);}}
+.mic-btn:active{transform:scale(0.92);}
+.mic-label{font-size:10px;color:var(--text3);letter-spacing:0.16em;text-transform:uppercase;}
+</style>
+</head>
+<body>
+
+<!-- ══════════ SETUP ══════════ -->
+<div id="setup">
+<div class="setup-inner">
+  <div class="logo-ring">🌉</div>
+  <div class="setup-eyebrow">vOICE BY FAISAL — Voice Bridge</div>
+  <div class="setup-title">اردو to 中文</div>
+  <div class="setup-sub">
+    <span class="s-ur">اردو</span><span class="s-arr">────▶</span><span class="s-zh">中文</span>
+  </div>
+
+  <div class="steps-card">
+    <div class="steps-head">One-time setup <span class="free-pill">100% FREE</span></div>
+    <div class="step-row">
+      <div class="step-n">1</div>
+      <div class="step-text">Go to <a href="https://console.groq.com" target="_blank">console.groq.com</a> — create free account. <strong>No credit card.</strong></div>
+    </div>
+    <div class="step-row">
+      <div class="step-n">2</div>
+      <div class="step-text">Click <strong>API Keys → Create API Key → Copy</strong></div>
+    </div>
+    <div class="step-row">
+      <div class="step-n">3</div>
+      <div class="step-text">Paste below. Saved <strong>only on this phone</strong>.</div>
+    </div>
+  </div>
+
+  <div class="key-card">
+    <div class="key-label">Groq API Key</div>
+    <div class="key-field">
+      <input type="password" id="keyInput" class="key-input"
+        placeholder="gsk_xxxxxxxxxxxxxxxxxxxxxxxx"
+        autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false">
+      <button class="eye-btn" onclick="toggleEye()">👁</button>
+    </div>
+  </div>
+
+  <button class="cta" id="ctaBtn" onclick="saveKey()" disabled>Save &amp; Open App →</button>
+  <p class="setup-note">Groq free: 7,200 sec audio/day · MyMemory translation: free<br>Works in China ✓ · No credit card ever</p>
+</div>
+</div>
+
+<!-- ══════════ APP ══════════ -->
+<div id="app">
+  <div class="topbar">
+    <div class="tb-brand">
+      <div class="tb-name">آواز</div>
+      <div class="tb-pair">
+        <span class="tb-ur">اردو</span>
+        <span class="tb-arr">▶</span>
+        <span class="tb-zh">中文</span>
+      </div>
+    </div>
+    <div class="gear-btn" onclick="resetKey()">⚙</div>
+  </div>
+
+  <!-- scrollable history -->
+  <div class="history" id="history">
+    <div class="empty" id="emptyState">
+      <div class="empty-orb">🎙</div>
+      <div class="empty-title">بولیں</div>
+      <div class="empty-hint">tap the mic · speak urdu<br>watch it transcribe live<br>hear chinese instantly</div>
+    </div>
+  </div>
+
+  <!-- LIVE PANEL — visible while recording / processing -->
+  <div class="live-panel" id="livePanel">
+    <!-- rec indicator row -->
+    <div class="live-rec-row" id="recRow">
+      <div class="live-rec-dot"></div>
+      <div class="live-rec-label" id="recLabel">listening in urdu</div>
+      <div class="waveform">
+        <div class="wv"></div><div class="wv"></div><div class="wv"></div>
+        <div class="wv"></div><div class="wv"></div><div class="wv"></div>
+      </div>
+    </div>
+    <!-- live urdu transcript -->
+    <div class="live-urdu-row" id="liveUrduRow">
+      <div class="live-tag"><div class="ltag-dot ur"></div>اردو — transcribing</div>
+      <div class="live-urdu-text" id="liveUrduText"></div>
+    </div>
+    <!-- live chinese translation -->
+    <div class="live-zh-row" id="liveZhRow">
+      <div class="live-tag"><div class="ltag-dot zh"></div>中文 — translating</div>
+      <div class="live-zh-text" id="liveZhText"></div>
+    </div>
+  </div>
+
+  <div class="errbox" id="errbox"></div>
+  <div class="install-banner" id="installBanner">
+    💡 <strong>Add to Home Screen:</strong> Safari Share (↑) → "Add to Home Screen"
+  </div>
+
+  <div class="statusbar">
+    <div class="sdot" id="sdot"></div>
+    <div class="smsg" id="smsg">ready — tap mic and speak in urdu</div>
+  </div>
+
+  <div class="controls">
+    <div class="ctrl-btn" onclick="clearHistory()">✕</div>
+    <div class="mic-wrap">
+      <button class="mic-btn" id="micBtn" onclick="handleMic()">
+        <svg class="mic-svg" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 1a4 4 0 0 1 4 4v6a4 4 0 0 1-8 0V5a4 4 0 0 1 4-4zm0 16a7 7 0 0 0 7-7 1 1 0 0 1 2 0 9 9 0 0 1-8 8.945V21h2a1 1 0 0 1 0 2H9a1 1 0 0 1 0-2h2v-2.055A9 9 0 0 1 3 10a1 1 0 0 1 2 0 7 7 0 0 0 7 7z"/>
+        </svg>
+      </button>
+      <span class="mic-label" id="micLabel">tap to speak</span>
+    </div>
+    <div class="ctrl-btn" onclick="replayLast()">▶</div>
+  </div>
+</div>
+
+<script>
+'use strict';
+
+// ── refs ──
+const $=id=>document.getElementById(id);
+const setupEl=$('setup'), appEl=$('app');
+const keyInput=$('keyInput'), ctaBtn=$('ctaBtn');
+const historyEl=$('history');
+const livePanel=$('livePanel'), recRow=$('recRow'), recLabel=$('recLabel');
+const liveUrduRow=$('liveUrduRow'), liveUrduText=$('liveUrduText');
+const liveZhRow=$('liveZhRow'), liveZhText=$('liveZhText');
+const errbox=$('errbox');
+const sdot=$('sdot'), smsg=$('smsg');
+const micBtn=$('micBtn'), micLabel=$('micLabel');
+const installBanner=$('installBanner');
+
+// ── state ──
+let groqKey='', mediaRecorder=null, audioChunks=[];
+let isRecording=false, lastChinese='', lastBubbleId=null, count=0;
+let ttsTimer=null;
+
+// ── boot ──
+document.addEventListener('DOMContentLoaded',()=>{
+  const s=localStorage.getItem('vb_key');
+  if(s&&s.startsWith('gsk_')){groqKey=s;openApp();}
+});
+keyInput.addEventListener('input',()=>{ctaBtn.disabled=keyInput.value.trim().length<20;});
+function toggleEye(){keyInput.type=keyInput.type==='password'?'text':'password';}
+function saveKey(){const k=keyInput.value.trim();if(!k)return;groqKey=k;localStorage.setItem('vb_key',k);openApp();}
+function openApp(){
+  setupEl.style.display='none';appEl.style.display='flex';
+  const ios=/iP(hone|ad|od)/.test(navigator.userAgent)&&!window.MSStream;
+  if(ios&&!window.navigator.standalone&&!localStorage.getItem('vb_hint')){
+    installBanner.classList.add('show');localStorage.setItem('vb_hint','1');
+    setTimeout(()=>installBanner.classList.remove('show'),9000);
+  }
+  window.speechSynthesis&&window.speechSynthesis.getVoices();
+}
+function resetKey(){if(!confirm('Change Groq API key?'))return;localStorage.removeItem('vb_key');location.reload();}
+
+// ── status ──
+function setSt(type,msg){sdot.className='sdot'+(type?' '+type:'');smsg.textContent=msg;}
+function showErr(msg,ms=6000){errbox.textContent=msg;errbox.classList.add('show');setTimeout(()=>errbox.classList.remove('show'),ms);}
+
+// ── live panel helpers ──
+function showLivePanel(recMode){
+  livePanel.classList.add('show');
+  recRow.style.display='flex';
+  liveUrduRow.classList.remove('show');
+  liveZhRow.classList.remove('show');
+  liveUrduText.textContent='';
+  liveZhText.textContent='';
+  recLabel.textContent=recMode?'listening in urdu':'transcribing…';
+}
+function hideLivePanel(){livePanel.classList.remove('show');}
+
+function setLiveUrdu(text){
+  liveUrduText.textContent=text;
+  if(text){liveUrduRow.classList.add('show');}
+}
+function setLiveZh(text){
+  liveZhText.textContent=text;
+  if(text){liveZhRow.classList.add('show');}
+}
+function setRecRowLabel(label){recLabel.textContent=label;}
+
+// ── recording ──
+async function handleMic(){
+  if(isRecording){stopRec();return;}
+  try{
+    const stream=await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:true,noiseSuppression:true,sampleRate:16000}});
+    startRec(stream);
+  }catch(e){showErr('Microphone access denied. Allow mic in browser settings.');}
+}
+
+function startRec(stream){
+  audioChunks=[];
+  const types=['audio/webm;codecs=opus','audio/webm','audio/mp4','audio/ogg;codecs=opus','audio/ogg'];
+  const mime=types.find(t=>MediaRecorder.isTypeSupported(t))||'';
+  mediaRecorder=new MediaRecorder(stream,mime?{mimeType:mime}:{});
+  mediaRecorder.ondataavailable=e=>{if(e.data&&e.data.size>0)audioChunks.push(e.data);};
+  mediaRecorder.onstop=processAudio;
+  mediaRecorder.start(200);
+  isRecording=true;
+  micBtn.classList.add('rec');
+  micLabel.textContent='tap to stop';
+  showLivePanel(true);
+  setSt('rec','recording — speak in urdu');
+}
+
+function stopRec(){
+  if(!mediaRecorder||mediaRecorder.state==='inactive')return;
+  mediaRecorder.stop();
+  mediaRecorder.stream.getTracks().forEach(t=>t.stop());
+  isRecording=false;
+  micBtn.classList.remove('rec');
+  micBtn.classList.add('proc');
+  micLabel.textContent='processing…';
+  setRecRowLabel('transcribing with whisper…');
+  setSt('proc','transcribing urdu…');
+}
+
+async function processAudio(){
+  micBtn.classList.remove('proc');
+  micLabel.textContent='tap to speak';
+  if(!audioChunks.length){hideLivePanel();setSt('','ready — tap mic and speak in urdu');return;}
+
+  const mime=mediaRecorder.mimeType||'audio/webm';
+  const ext=mime.includes('mp4')?'m4a':mime.includes('ogg')?'ogg':'webm';
+  const blob=new Blob(audioChunks,{type:mime});
+
+  try{
+    // ── 1. Groq Whisper ──
+    const form=new FormData();
+    form.append('file',blob,'rec.'+ext);
+    form.append('model','whisper-large-v3');
+    form.append('language','ur');
+    form.append('response_format','json');
+
+    const r1=await fetch('https://api.groq.com/openai/v1/audio/transcriptions',{
+      method:'POST',headers:{Authorization:'Bearer '+groqKey},body:form
+    });
+
+    if(r1.status===401){hideLivePanel();showErr('Invalid API key. Tap ⚙ to update.');setSt('','ready — tap mic and speak in urdu');return;}
+    if(r1.status===429){hideLivePanel();showErr('Rate limit. Wait a moment and try again.');setSt('','ready — tap mic and speak in urdu');return;}
+    if(!r1.ok){hideLivePanel();let em='Error '+r1.status;try{const j=await r1.json();em=j?.error?.message||em;}catch(e2){}showErr(em);setSt('','ready — tap mic and speak in urdu');return;}
+
+    const d1=await r1.json();
+    const urdu=(d1.text||'').trim();
+    if(!urdu){hideLivePanel();showErr('No speech detected. Try again.');setSt('','ready — tap mic and speak in urdu');return;}
+
+    // show transcribed urdu live
+    setLiveUrdu(urdu);
+    setRecRowLabel('translating to chinese…');
+    setSt('proc','translating…');
+
+    // ── 2. MyMemory translation ──
+    const r2=await fetch('https://api.mymemory.translated.net/get?q='+encodeURIComponent(urdu)+'&langpair=ur|zh');
+    const d2=await r2.json();
+    const zh=(d2.responseData?.translatedText||'').trim();
+
+    if(!zh||d2.responseStatus!==200){hideLivePanel();showErr('Translation failed. Check connection.');setSt('','ready — tap mic and speak in urdu');return;}
+
+    // show translated chinese in live panel briefly
+    setLiveZh(zh);
+    setRecRowLabel('done ✓');
+    setSt('ok','speaking chinese…');
+
+    lastChinese=zh;
+
+    // after short preview, commit to bubble and speak
+    await sleep(600);
+    hideLivePanel();
+    const id=addBubble(urdu,zh);
+    lastBubbleId=id;
+    speakBubble(id,zh,()=>setSt('','ready — tap mic and speak in urdu'));
+
+  }catch(e){
+    hideLivePanel();
+    showErr('Network error: '+(e.message||'check connection'));
+    setSt('','ready — tap mic and speak in urdu');
+  }
+}
+
+function sleep(ms){return new Promise(r=>setTimeout(r,ms));}
+
+// ── bubble ──
+function addBubble(urdu,zh){
+  const es=$('emptyState');if(es)es.remove();
+  const id='b'+(++count);
+  const time=new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
+
+  // build per-character spans for Chinese highlight
+  const zhSpans=[...zh].map((ch,i)=>`<span class="zh-char" id="${id}-c${i}">${escHtml(ch)}</span>`).join('');
+
+  const div=document.createElement('div');
+  div.className='bubble';div.id=id;
+  div.innerHTML=`
+    <div class="bubble-card" id="card-${id}">
+      <div class="b-ur-sec">
+        <div class="b-tag"><div class="b-dot ur"></div>اردو</div>
+        <div class="b-ur-text">${escHtml(urdu)}</div>
+      </div>
+      <div class="b-zh-sec">
+        <div class="b-zh-main">
+          <div class="b-tag"><div class="b-dot zh"></div>中文</div>
+          <div class="b-zh-text" id="zht-${id}">${zhSpans}</div>
+        </div>
+        <button class="spk-btn" id="spk-${id}" onclick="replayBubble('${id}')">🔊</button>
+      </div>
+    </div>
+    <div class="b-foot">${time}</div>`;
+  historyEl.appendChild(div);
+  historyEl.scrollTop=historyEl.scrollHeight;
+  return id;
+}
+
+function escHtml(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+
+// ── speaking with character highlight ──
+function replayBubble(id){
+  const card=$('card-'+id);
+  const text=getBubbleZhText(id);
+  if(!text)return;
+  speakBubble(id,text,()=>{});
+}
+
+function getBubbleZhText(id){
+  const el=$('zht-'+id);
+  return el?el.textContent:'';
+}
+
+function speakBubble(id,zh,onEnd){
+  if(!window.speechSynthesis){onEnd();return;}
+  window.speechSynthesis.cancel();
+  clearHighlight(id);
+
+  const card=$('card-'+id);
+  const spkBtn=$('spk-'+id);
+  card&&card.classList.add('speaking');
+  spkBtn&&spkBtn.classList.add('on');
+
+  const chars=[...zh];
+  const totalChars=chars.length;
+
+  const u=new SpeechSynthesisUtterance(zh);
+  u.lang='zh-CN';u.rate=0.82;u.pitch=1.0;
+  const vs=window.speechSynthesis.getVoices();
+  const v=vs.find(v=>v.lang==='zh-CN')||vs.find(v=>v.lang.startsWith('zh'));
+  if(v)u.voice=v;
+
+  // Use boundary events for word highlight where supported,
+  // fall back to time-based per-character highlight
+  let charIndex=0;
+  let ttsStarted=false;
+  let startTime=0;
+
+  // Estimate duration: ~0.35s per Chinese character at rate 0.82
+  const msPerChar=350/u.rate;
+
+  u.onstart=()=>{
+    ttsStarted=true;
+    startTime=Date.now();
+    // animate characters progressively
+    animateChars(id,totalChars,msPerChar);
+  };
+
+  u.onboundary=e=>{
+    // if boundary gives charIndex, use it
+    if(e.name==='word'&&e.charIndex!=null){
+      charIndex=e.charIndex;
+    }
+  };
+
+  u.onend=()=>{
+    clearTimeout(ttsTimer);
+    // light up all chars briefly then clear
+    litAll(id,totalChars);
+    setTimeout(()=>{
+      clearHighlight(id);
+      card&&card.classList.remove('speaking');
+      spkBtn&&spkBtn.classList.remove('on');
+      onEnd();
+    },400);
+  };
+
+  u.onerror=()=>{
+    clearTimeout(ttsTimer);
+    clearHighlight(id);
+    card&&card.classList.remove('speaking');
+    spkBtn&&spkBtn.classList.remove('on');
+    onEnd();
+  };
+
+  window.speechSynthesis.speak(u);
+}
+
+function animateChars(id,total,msPerChar){
+  let i=0;
+  function next(){
+    if(i>0)unlit(id,i-1);
+    if(i<total){
+      lit(id,i);
+      i++;
+      ttsTimer=setTimeout(next,msPerChar);
+    }
+  }
+  next();
+}
+
+function lit(id,i){
+  const el=$(id+'-c'+i);
+  if(el)el.classList.add('lit');
+}
+function unlit(id,i){
+  const el=$(id+'-c'+i);
+  if(el)el.classList.remove('lit');
+}
+function litAll(id,total){
+  for(let i=0;i<total;i++)lit(id,i);
+}
+function clearHighlight(id){
+  clearTimeout(ttsTimer);
+  const el=$('zht-'+id);
+  if(!el)return;
+  el.querySelectorAll('.zh-char').forEach(c=>c.classList.remove('lit'));
+}
+
+function replayLast(){
+  if(lastBubbleId){replayBubble(lastBubbleId);}
+}
+
+// ── clear ──
+function clearHistory(){
+  window.speechSynthesis&&window.speechSynthesis.cancel();
+  clearTimeout(ttsTimer);
+  lastChinese='';lastBubbleId=null;count=0;
+  historyEl.innerHTML=`<div class="empty" id="emptyState">
+    <div class="empty-orb">🎙</div>
+    <div class="empty-title">بولیں</div>
+    <div class="empty-hint">tap the mic · speak urdu<br>watch it transcribe live<br>hear chinese instantly</div>
+  </div>`;
+  setSt('','ready — tap mic and speak in urdu');
+}
+
+// preload voices
+window.speechSynthesis&&window.speechSynthesis.getVoices();
+if(window.speechSynthesis)window.speechSynthesis.onvoiceschanged=()=>window.speechSynthesis.getVoices();
+</script>
+</body>
+</html>
