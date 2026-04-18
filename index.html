@@ -26,6 +26,8 @@
   --text:  #2c0202;
   --text2: #302300;
   --text3: #000432;
+  --edit-bg: #fffbe8;
+  --edit-border: #c9973a;
 }
 
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;user-select:none;}
@@ -86,7 +88,7 @@ html,body{height:100%;height:-webkit-fill-available;background:var(--bg);color:v
 .empty-title{font-family:'Instrument Serif',serif;font-size:26px;color:var(--text2);text-align:center;}
 .empty-hint{font-size:12px;color:var(--text3);text-align:center;line-height:2;letter-spacing:0.04em;}
 
-/* ── LIVE PANEL (shown while recording + processing) ── */
+/* ── LIVE PANEL ── */
 .live-panel{
   margin:0 16px 8px;
   background:var(--s1);border:0.5px solid var(--rim2);
@@ -111,6 +113,100 @@ html,body{height:100%;height:-webkit-fill-available;background:var(--bg);color:v
 .wv:nth-child(6){animation:wave 0.9s 0.05s infinite ease-in-out;}
 @keyframes wave{0%,100%{height:4px}50%{height:16px}}
 
+/* ── EDIT PANEL — new! ── */
+.edit-panel{
+  margin:0 16px 8px;
+  background:var(--edit-bg);
+  border:1.5px solid var(--edit-border);
+  border-radius:20px;overflow:hidden;
+  display:none;flex-direction:column;
+  animation:slideUp 0.25s cubic-bezier(0.2,0,0,1);
+}
+.edit-panel.show{display:flex;}
+@keyframes slideUp{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
+
+.edit-header{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:11px 16px;
+  border-bottom:1px solid rgba(201,151,58,0.25);
+  background:rgba(201,151,58,0.07);
+}
+.edit-title{
+  display:flex;align-items:center;gap:7px;
+  font-size:10px;letter-spacing:0.2em;color:var(--goldd);text-transform:uppercase;font-weight:500;
+}
+.edit-pencil{font-size:14px;}
+.edit-hint{font-size:10px;color:var(--text3);font-style:italic;letter-spacing:0.02em;}
+
+.edit-ur-wrap{
+  padding:14px 16px;
+  border-bottom:1px solid rgba(201,151,58,0.2);
+  position:relative;
+}
+.edit-ur-label{
+  font-size:9px;letter-spacing:0.18em;color:var(--text3);text-transform:uppercase;margin-bottom:7px;
+  display:flex;align-items:center;gap:5px;
+}
+.elabel-dot{width:5px;height:5px;border-radius:50%;background:var(--lav);}
+/* The editable textarea */
+.edit-textarea{
+  width:100%;
+  font-family:'Noto Nastaliq Urdu',serif;
+  font-size:20px;
+  color:var(--lavf);
+  direction:rtl;
+  line-height:2.1;
+  background:transparent;
+  border:none;
+  outline:none;
+  resize:none;
+  -webkit-appearance:none;
+  appearance:none;
+  user-select:text;
+  -webkit-user-select:text;
+  min-height:60px;
+  padding:4px 2px;
+  caret-color:var(--gold);
+  letter-spacing:0.01em;
+}
+.edit-textarea::placeholder{color:rgba(62,201,138,0.4);font-size:16px;}
+/* char count */
+.edit-charcount{
+  font-size:10px;color:var(--text3);text-align:left;margin-top:4px;
+  opacity:0.7;letter-spacing:0.05em;
+}
+
+.edit-actions{
+  display:flex;gap:10px;padding:12px 16px;
+  align-items:center;
+}
+.edit-retranslate{
+  flex:1;
+  padding:13px;
+  background:var(--gold);
+  border:none;border-radius:12px;
+  font-family:'DM Sans',sans-serif;font-size:12px;font-weight:500;
+  letter-spacing:0.1em;text-transform:uppercase;
+  color:#07080f;cursor:pointer;
+  transition:opacity 0.15s,transform 0.1s;
+  display:flex;align-items:center;justify-content:center;gap:6px;
+}
+.edit-retranslate:active{transform:scale(0.96);opacity:0.88;}
+.edit-retranslate:disabled{opacity:0.3;cursor:not-allowed;transform:none!important;}
+.edit-cancel{
+  width:44px;height:44px;border-radius:50%;
+  background:rgba(224,85,85,0.08);border:0.5px solid rgba(224,85,85,0.3);
+  display:flex;align-items:center;justify-content:center;
+  font-size:16px;cursor:pointer;color:var(--red);flex-shrink:0;
+  transition:all 0.15s;
+}
+.edit-cancel:active{transform:scale(0.88);}
+
+/* small spinning indicator inside translate btn */
+.spin{display:inline-block;animation:spin 0.7s linear infinite;font-size:13px;}
+@keyframes spin{to{transform:rotate(360deg);}}
+
+/* ── bubble (existing) ── */
 .live-urdu-row{padding:12px 16px;border-bottom:0.5px solid var(--rim);min-height:56px;display:none;}
 .live-urdu-row.show{display:block;}
 .live-tag{font-size:9px;letter-spacing:0.18em;color:var(--text3);text-transform:uppercase;margin-bottom:5px;display:flex;align-items:center;gap:5px;}
@@ -130,26 +226,36 @@ html,body{height:100%;height:-webkit-fill-available;background:var(--bg);color:v
 .bubble-card{background:var(--s1);border:0.5px solid var(--rim);border-radius:20px;overflow:hidden;transition:border-color 0.3s,box-shadow 0.3s;}
 .bubble-card.speaking{border-color:var(--goldd);box-shadow:0 0 0 1px var(--goldd),0 0 30px rgba(201,151,58,0.1);}
 
-.b-ur-sec{padding:15px 17px 13px;border-bottom:0.5px solid var(--rim);}
+.b-ur-sec{padding:15px 17px 13px;border-bottom:0.5px solid var(--rim);position:relative;}
 .b-tag{font-size:9px;letter-spacing:0.18em;color:var(--text3);text-transform:uppercase;margin-bottom:6px;display:flex;align-items:center;gap:5px;}
 .b-dot{width:5px;height:5px;border-radius:50%;}
 .b-dot.ur{background:var(--lav);}
 .b-dot.zh{background:var(--gold);}
 .b-ur-text{font-family:'Noto Nastaliq Urdu',serif;font-size:21px;color:var(--lavf);direction:rtl;line-height:2.1;}
 
+/* tap-to-edit hint on the bubble */
+.b-edit-hint{
+  font-size:9px;color:var(--goldd);letter-spacing:0.12em;text-transform:uppercase;
+  margin-top:6px;opacity:0.7;text-align:right;display:flex;align-items:center;justify-content:flex-end;gap:4px;
+}
+
 .b-zh-sec{padding:13px 17px 15px;display:flex;align-items:flex-end;justify-content:space-between;gap:12px;}
 .b-zh-main{flex:1;}
-
-/* Chinese text with per-char spans for highlight */
 .b-zh-text{font-family:'Noto Sans SC',sans-serif;font-size:26px;color:var(--text);line-height:1.45;letter-spacing:0.03em;font-weight:300;}
 .zh-char{display:inline;transition:color 0.15s,text-shadow 0.15s;}
 .zh-char.lit{color:var(--goldf);text-shadow:0 0 20px rgba(232,190,106,0.5);}
 
+.b-actions{display:flex;gap:8px;align-items:flex-end;}
 .spk-btn{width:42px;height:42px;border-radius:50%;background:var(--s2);border:0.5px solid var(--rim2);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:15px;color:var(--text3);flex-shrink:0;transition:all 0.2s;align-self:flex-end;}
 .spk-btn:active{transform:scale(0.88);}
 .spk-btn.on{background:rgba(201,151,58,0.12);border-color:var(--gold);color:var(--gold);}
 
-.b-foot{padding:0 17px 12px;font-size:10px;color:var(--text3);}
+/* edit-bubble button on committed bubble */
+.edit-bubble-btn{width:42px;height:42px;border-radius:50%;background:rgba(201,151,58,0.08);border:0.5px solid rgba(201,151,58,0.3);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:14px;color:var(--goldd);flex-shrink:0;transition:all 0.2s;align-self:flex-end;}
+.edit-bubble-btn:active{transform:scale(0.88);}
+
+.b-foot{padding:0 17px 12px;font-size:10px;color:var(--text3);display:flex;align-items:center;justify-content:space-between;}
+.b-edited-badge{font-size:9px;color:var(--goldd);letter-spacing:0.12em;text-transform:uppercase;opacity:0.8;}
 
 /* ── STATUS BAR ── */
 .statusbar{margin:4px 16px 6px;background:var(--s1);border:0.5px solid var(--rim);border-radius:12px;padding:11px 15px;display:flex;align-items:center;gap:10px;flex-shrink:0;}
@@ -160,11 +266,9 @@ html,body{height:100%;height:-webkit-fill-available;background:var(--bg);color:v
 @keyframes blink{0%,100%{opacity:1}50%{opacity:0.15}}
 .smsg{font-size:12px;color:var(--text2);letter-spacing:0.04em;flex:1;}
 
-/* error */
 .errbox{margin:0 16px 4px;background:rgba(224,85,85,0.08);border:0.5px solid rgba(224,85,85,0.25);border-radius:12px;padding:11px 14px;font-size:12px;color:var(--red);line-height:1.6;display:none;}
 .errbox.show{display:block;}
 
-/* install */
 .install-banner{margin:0 16px 6px;background:rgba(201,151,58,0.08);border:0.5px solid rgba(201,151,58,0.22);border-radius:12px;padding:11px 15px;font-size:12px;color:var(--text2);line-height:1.7;display:none;}
 .install-banner.show{display:block;}
 .install-banner strong{color:var(--goldf);font-weight:500;}
@@ -182,6 +286,8 @@ html,body{height:100%;height:-webkit-fill-available;background:var(--bg);color:v
 .mic-btn.rec .mic-svg{fill:var(--red);}
 .mic-btn.proc{border-color:var(--goldd);}
 .mic-btn.proc .mic-svg{fill:var(--gold);}
+.mic-btn.edit-mode{border-color:var(--goldd);background:rgba(201,151,58,0.06);}
+.mic-btn.edit-mode .mic-svg{fill:var(--goldd);}
 @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(224,85,85,0.35);}60%{box-shadow:0 0 0 20px rgba(224,85,85,0);}100%{box-shadow:0 0 0 0 rgba(224,85,85,0);}}
 .mic-btn:active{transform:scale(0.92);}
 .mic-label{font-size:10px;color:var(--text3);letter-spacing:0.16em;text-transform:uppercase;}
@@ -193,7 +299,7 @@ html,body{height:100%;height:-webkit-fill-available;background:var(--bg);color:v
 <div id="setup">
 <div class="setup-inner">
   <div class="logo-ring">🌉</div>
-  <div class="setup-eyebrow">vOICE BY FAISAL — Voice Bridge</div>
+  <div class="setup-eyebrow">آواز — Voice Bridge</div>
   <div class="setup-title">اردو to 中文</div>
   <div class="setup-sub">
     <span class="s-ur">اردو</span><span class="s-arr">────▶</span><span class="s-zh">中文</span>
@@ -244,18 +350,16 @@ html,body{height:100%;height:-webkit-fill-available;background:var(--bg);color:v
     <div class="gear-btn" onclick="resetKey()">⚙</div>
   </div>
 
-  <!-- scrollable history -->
   <div class="history" id="history">
     <div class="empty" id="emptyState">
       <div class="empty-orb">🎙</div>
       <div class="empty-title">بولیں</div>
-      <div class="empty-hint">tap the mic · speak urdu<br>watch it transcribe live<br>hear chinese instantly</div>
+      <div class="empty-hint">tap the mic · speak urdu<br>whisper transcribes live<br>edit if needed · hear chinese</div>
     </div>
   </div>
 
-  <!-- LIVE PANEL — visible while recording / processing -->
+  <!-- LIVE PANEL — recording/processing -->
   <div class="live-panel" id="livePanel">
-    <!-- rec indicator row -->
     <div class="live-rec-row" id="recRow">
       <div class="live-rec-dot"></div>
       <div class="live-rec-label" id="recLabel">listening in urdu</div>
@@ -264,15 +368,47 @@ html,body{height:100%;height:-webkit-fill-available;background:var(--bg);color:v
         <div class="wv"></div><div class="wv"></div><div class="wv"></div>
       </div>
     </div>
-    <!-- live urdu transcript -->
     <div class="live-urdu-row" id="liveUrduRow">
       <div class="live-tag"><div class="ltag-dot ur"></div>اردو — transcribing</div>
       <div class="live-urdu-text" id="liveUrduText"></div>
     </div>
-    <!-- live chinese translation -->
     <div class="live-zh-row" id="liveZhRow">
       <div class="live-tag"><div class="ltag-dot zh"></div>中文 — translating</div>
       <div class="live-zh-text" id="liveZhText"></div>
+    </div>
+  </div>
+
+  <!-- ══ EDIT PANEL — shown after Whisper, before translation ══ -->
+  <div class="edit-panel" id="editPanel">
+    <div class="edit-header">
+      <div class="edit-title">
+        <span class="edit-pencil">✏️</span>
+        ترمیم کریں — Fix Urdu
+      </div>
+      <div class="edit-hint">whisper made a mistake? fix it</div>
+    </div>
+    <div class="edit-ur-wrap">
+      <div class="edit-ur-label">
+        <div class="elabel-dot"></div>اردو transcript
+      </div>
+      <textarea
+        id="editTextarea"
+        class="edit-textarea"
+        dir="rtl"
+        placeholder="یہاں اردو لکھیں…"
+        rows="3"
+        autocorrect="off"
+        autocapitalize="off"
+        spellcheck="false"
+      ></textarea>
+      <div class="edit-charcount" id="editCharCount">0 chars</div>
+    </div>
+    <div class="edit-actions">
+      <button class="edit-cancel" onclick="cancelEdit()" title="Cancel">✕</button>
+      <button class="edit-retranslate" id="editTranslateBtn" onclick="confirmEdit()">
+        <span>→ 中文</span>
+        <span style="font-size:11px;opacity:0.7;">translate</span>
+      </button>
     </div>
   </div>
 
@@ -303,7 +439,6 @@ html,body{height:100%;height:-webkit-fill-available;background:var(--bg);color:v
 <script>
 'use strict';
 
-// ── refs ──
 const $=id=>document.getElementById(id);
 const setupEl=$('setup'), appEl=$('app');
 const keyInput=$('keyInput'), ctaBtn=$('ctaBtn');
@@ -311,15 +446,17 @@ const historyEl=$('history');
 const livePanel=$('livePanel'), recRow=$('recRow'), recLabel=$('recLabel');
 const liveUrduRow=$('liveUrduRow'), liveUrduText=$('liveUrduText');
 const liveZhRow=$('liveZhRow'), liveZhText=$('liveZhText');
+const editPanel=$('editPanel'), editTextarea=$('editTextarea');
+const editCharCount=$('editCharCount'), editTranslateBtn=$('editTranslateBtn');
 const errbox=$('errbox');
 const sdot=$('sdot'), smsg=$('smsg');
 const micBtn=$('micBtn'), micLabel=$('micLabel');
 const installBanner=$('installBanner');
 
-// ── state ──
 let groqKey='', mediaRecorder=null, audioChunks=[];
 let isRecording=false, lastChinese='', lastBubbleId=null, count=0;
 let ttsTimer=null;
+let pendingUrdu=''; // urdu text waiting in edit panel
 
 // ── boot ──
 document.addEventListener('DOMContentLoaded',()=>{
@@ -340,11 +477,10 @@ function openApp(){
 }
 function resetKey(){if(!confirm('Change Groq API key?'))return;localStorage.removeItem('vb_key');location.reload();}
 
-// ── status ──
 function setSt(type,msg){sdot.className='sdot'+(type?' '+type:'');smsg.textContent=msg;}
 function showErr(msg,ms=6000){errbox.textContent=msg;errbox.classList.add('show');setTimeout(()=>errbox.classList.remove('show'),ms);}
 
-// ── live panel helpers ──
+// ── live panel ──
 function showLivePanel(recMode){
   livePanel.classList.add('show');
   recRow.style.display='flex';
@@ -355,19 +491,120 @@ function showLivePanel(recMode){
   recLabel.textContent=recMode?'listening in urdu':'transcribing…';
 }
 function hideLivePanel(){livePanel.classList.remove('show');}
-
-function setLiveUrdu(text){
-  liveUrduText.textContent=text;
-  if(text){liveUrduRow.classList.add('show');}
-}
-function setLiveZh(text){
-  liveZhText.textContent=text;
-  if(text){liveZhRow.classList.add('show');}
-}
+function setLiveUrdu(text){liveUrduText.textContent=text;if(text)liveUrduRow.classList.add('show');}
+function setLiveZh(text){liveZhText.textContent=text;if(text)liveZhRow.classList.add('show');}
 function setRecRowLabel(label){recLabel.textContent=label;}
+
+// ── EDIT PANEL ──
+function showEditPanel(urduText){
+  pendingUrdu=urduText;
+  editTextarea.value=urduText;
+  updateCharCount();
+  editPanel.classList.add('show');
+  micBtn.classList.add('edit-mode');
+  micLabel.textContent='editing…';
+  setSt('proc','review urdu · fix if needed · tap → 中文');
+  // focus textarea after animation
+  setTimeout(()=>{
+    editTextarea.focus();
+    // place cursor at end
+    const len=editTextarea.value.length;
+    editTextarea.setSelectionRange(len,len);
+  },260);
+}
+function hideEditPanel(){
+  editPanel.classList.remove('show');
+  micBtn.classList.remove('edit-mode');
+  micLabel.textContent='tap to speak';
+}
+function updateCharCount(){
+  const n=editTextarea.value.trim().length;
+  editCharCount.textContent=n+' chars';
+  editTranslateBtn.disabled=n===0;
+}
+editTextarea.addEventListener('input',updateCharCount);
+
+// Cancel edit — discard
+function cancelEdit(){
+  hideEditPanel();
+  hideLivePanel();
+  pendingUrdu='';
+  setSt('','ready — tap mic and speak in urdu');
+}
+
+// Confirm edit — proceed with (possibly modified) urdu
+async function confirmEdit(){
+  const urdu=editTextarea.value.trim();
+  if(!urdu)return;
+  const wasEdited=urdu!==pendingUrdu;
+  hideEditPanel();
+  hideLivePanel();
+
+  // show brief "translating" status
+  setSt('proc','translating…');
+  micBtn.classList.add('proc');
+  micLabel.textContent='translating…';
+
+  editTranslateBtn.innerHTML='<span class="spin">⏳</span><span style="font-size:11px;opacity:0.7;">translating</span>';
+  editTranslateBtn.disabled=true;
+
+  try{
+    const r2=await fetch('https://api.mymemory.translated.net/get?q='+encodeURIComponent(urdu)+'&langpair=ur|zh');
+    const d2=await r2.json();
+    const zh=(d2.responseData?.translatedText||'').trim();
+
+    if(!zh||d2.responseStatus!==200){
+      showErr('Translation failed. Check connection.');
+      setSt('','ready — tap mic and speak in urdu');
+      micBtn.classList.remove('proc');
+      micLabel.textContent='tap to speak';
+      return;
+    }
+
+    lastChinese=zh;
+    setSt('ok','speaking chinese…');
+    micBtn.classList.remove('proc');
+    micLabel.textContent='tap to speak';
+
+    const id=addBubble(urdu,zh,wasEdited);
+    lastBubbleId=id;
+    speakBubble(id,zh,()=>setSt('','ready — tap mic and speak in urdu'));
+
+  }catch(e){
+    showErr('Network error: '+(e.message||'check connection'));
+    setSt('','ready — tap mic and speak in urdu');
+    micBtn.classList.remove('proc');
+    micLabel.textContent='tap to speak';
+  } finally {
+    editTranslateBtn.innerHTML='<span>→ 中文</span><span style="font-size:11px;opacity:0.7;">translate</span>';
+    editTranslateBtn.disabled=false;
+  }
+}
+
+// ── Edit an already-committed bubble ──
+function editBubble(id){
+  // find urdu text from the bubble
+  const urEl=document.querySelector('#'+id+' .b-ur-text');
+  if(!urEl)return;
+  const urdu=urEl.textContent;
+  // remove old bubble
+  const bEl=$(id);
+  if(bEl)bEl.remove();
+  if(historyEl.children.length===0){
+    historyEl.innerHTML=`<div class="empty" id="emptyState">
+      <div class="empty-orb">🎙</div>
+      <div class="empty-title">بولیں</div>
+      <div class="empty-hint">tap the mic · speak urdu<br>whisper transcribes live<br>edit if needed · hear chinese</div>
+    </div>`;
+  }
+  if(lastBubbleId===id)lastBubbleId=null;
+  showEditPanel(urdu);
+}
 
 // ── recording ──
 async function handleMic(){
+  // if edit panel is open, treat mic tap as "translate now"
+  if(editPanel.classList.contains('show')){confirmEdit();return;}
   if(isRecording){stopRec();return;}
   try{
     const stream=await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:true,noiseSuppression:true,sampleRate:16000}});
@@ -397,7 +634,7 @@ function stopRec(){
   isRecording=false;
   micBtn.classList.remove('rec');
   micBtn.classList.add('proc');
-  micLabel.textContent='processing…';
+  micLabel.textContent='transcribing…';
   setRecRowLabel('transcribing with whisper…');
   setSt('proc','transcribing urdu…');
 }
@@ -412,7 +649,6 @@ async function processAudio(){
   const blob=new Blob(audioChunks,{type:mime});
 
   try{
-    // ── 1. Groq Whisper ──
     const form=new FormData();
     form.append('file',blob,'rec.'+ext);
     form.append('model','whisper-large-v3');
@@ -431,31 +667,15 @@ async function processAudio(){
     const urdu=(d1.text||'').trim();
     if(!urdu){hideLivePanel();showErr('No speech detected. Try again.');setSt('','ready — tap mic and speak in urdu');return;}
 
-    // show transcribed urdu live
+    // Show transcribed urdu in live panel briefly, then open edit panel
     setLiveUrdu(urdu);
-    setRecRowLabel('translating to chinese…');
-    setSt('proc','translating…');
+    setRecRowLabel('transcribed ✓ — review below');
+    setSt('proc','transcribed — fix urdu if needed');
 
-    // ── 2. MyMemory translation ──
-    const r2=await fetch('https://api.mymemory.translated.net/get?q='+encodeURIComponent(urdu)+'&langpair=ur|zh');
-    const d2=await r2.json();
-    const zh=(d2.responseData?.translatedText||'').trim();
-
-    if(!zh||d2.responseStatus!==200){hideLivePanel();showErr('Translation failed. Check connection.');setSt('','ready — tap mic and speak in urdu');return;}
-
-    // show translated chinese in live panel briefly
-    setLiveZh(zh);
-    setRecRowLabel('done ✓');
-    setSt('ok','speaking chinese…');
-
-    lastChinese=zh;
-
-    // after short preview, commit to bubble and speak
-    await sleep(600);
+    // brief pause so user sees the live panel, then open editor
+    await sleep(500);
     hideLivePanel();
-    const id=addBubble(urdu,zh);
-    lastBubbleId=id;
-    speakBubble(id,zh,()=>setSt('','ready — tap mic and speak in urdu'));
+    showEditPanel(urdu);
 
   }catch(e){
     hideLivePanel();
@@ -467,12 +687,11 @@ async function processAudio(){
 function sleep(ms){return new Promise(r=>setTimeout(r,ms));}
 
 // ── bubble ──
-function addBubble(urdu,zh){
+function addBubble(urdu,zh,wasEdited=false){
   const es=$('emptyState');if(es)es.remove();
   const id='b'+(++count);
   const time=new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
 
-  // build per-character spans for Chinese highlight
   const zhSpans=[...zh].map((ch,i)=>`<span class="zh-char" id="${id}-c${i}">${escHtml(ch)}</span>`).join('');
 
   const div=document.createElement('div');
@@ -488,10 +707,16 @@ function addBubble(urdu,zh){
           <div class="b-tag"><div class="b-dot zh"></div>中文</div>
           <div class="b-zh-text" id="zht-${id}">${zhSpans}</div>
         </div>
-        <button class="spk-btn" id="spk-${id}" onclick="replayBubble('${id}')">🔊</button>
+        <div class="b-actions">
+          <button class="edit-bubble-btn" onclick="editBubble('${id}')" title="Fix Urdu & retranslate">✏️</button>
+          <button class="spk-btn" id="spk-${id}" onclick="replayBubble('${id}')">🔊</button>
+        </div>
       </div>
     </div>
-    <div class="b-foot">${time}</div>`;
+    <div class="b-foot">
+      <span>${time}</span>
+      ${wasEdited?'<span class="b-edited-badge">✏ edited</span>':''}
+    </div>`;
   historyEl.appendChild(div);
   historyEl.scrollTop=historyEl.scrollHeight;
   return id;
@@ -499,24 +724,20 @@ function addBubble(urdu,zh){
 
 function escHtml(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 
-// ── speaking with character highlight ──
+// ── speaking ──
 function replayBubble(id){
-  const card=$('card-'+id);
   const text=getBubbleZhText(id);
   if(!text)return;
   speakBubble(id,text,()=>{});
 }
-
 function getBubbleZhText(id){
-  const el=$('zht-'+id);
-  return el?el.textContent:'';
+  const el=$('zht-'+id);return el?el.textContent:'';
 }
 
 function speakBubble(id,zh,onEnd){
   if(!window.speechSynthesis){onEnd();return;}
   window.speechSynthesis.cancel();
   clearHighlight(id);
-
   const card=$('card-'+id);
   const spkBtn=$('spk-'+id);
   card&&card.classList.add('speaking');
@@ -524,48 +745,19 @@ function speakBubble(id,zh,onEnd){
 
   const chars=[...zh];
   const totalChars=chars.length;
-
   const u=new SpeechSynthesisUtterance(zh);
   u.lang='zh-CN';u.rate=0.82;u.pitch=1.0;
   const vs=window.speechSynthesis.getVoices();
   const v=vs.find(v=>v.lang==='zh-CN')||vs.find(v=>v.lang.startsWith('zh'));
   if(v)u.voice=v;
 
-  // Use boundary events for word highlight where supported,
-  // fall back to time-based per-character highlight
-  let charIndex=0;
-  let ttsStarted=false;
-  let startTime=0;
-
-  // Estimate duration: ~0.35s per Chinese character at rate 0.82
   const msPerChar=350/u.rate;
-
-  u.onstart=()=>{
-    ttsStarted=true;
-    startTime=Date.now();
-    // animate characters progressively
-    animateChars(id,totalChars,msPerChar);
-  };
-
-  u.onboundary=e=>{
-    // if boundary gives charIndex, use it
-    if(e.name==='word'&&e.charIndex!=null){
-      charIndex=e.charIndex;
-    }
-  };
-
+  u.onstart=()=>animateChars(id,totalChars,msPerChar);
   u.onend=()=>{
     clearTimeout(ttsTimer);
-    // light up all chars briefly then clear
     litAll(id,totalChars);
-    setTimeout(()=>{
-      clearHighlight(id);
-      card&&card.classList.remove('speaking');
-      spkBtn&&spkBtn.classList.remove('on');
-      onEnd();
-    },400);
+    setTimeout(()=>{clearHighlight(id);card&&card.classList.remove('speaking');spkBtn&&spkBtn.classList.remove('on');onEnd();},400);
   };
-
   u.onerror=()=>{
     clearTimeout(ttsTimer);
     clearHighlight(id);
@@ -573,7 +765,6 @@ function speakBubble(id,zh,onEnd){
     spkBtn&&spkBtn.classList.remove('on');
     onEnd();
   };
-
   window.speechSynthesis.speak(u);
 }
 
@@ -581,26 +772,13 @@ function animateChars(id,total,msPerChar){
   let i=0;
   function next(){
     if(i>0)unlit(id,i-1);
-    if(i<total){
-      lit(id,i);
-      i++;
-      ttsTimer=setTimeout(next,msPerChar);
-    }
+    if(i<total){lit(id,i);i++;ttsTimer=setTimeout(next,msPerChar);}
   }
   next();
 }
-
-function lit(id,i){
-  const el=$(id+'-c'+i);
-  if(el)el.classList.add('lit');
-}
-function unlit(id,i){
-  const el=$(id+'-c'+i);
-  if(el)el.classList.remove('lit');
-}
-function litAll(id,total){
-  for(let i=0;i<total;i++)lit(id,i);
-}
+function lit(id,i){const el=$(id+'-c'+i);if(el)el.classList.add('lit');}
+function unlit(id,i){const el=$(id+'-c'+i);if(el)el.classList.remove('lit');}
+function litAll(id,total){for(let i=0;i<total;i++)lit(id,i);}
 function clearHighlight(id){
   clearTimeout(ttsTimer);
   const el=$('zht-'+id);
@@ -608,24 +786,21 @@ function clearHighlight(id){
   el.querySelectorAll('.zh-char').forEach(c=>c.classList.remove('lit'));
 }
 
-function replayLast(){
-  if(lastBubbleId){replayBubble(lastBubbleId);}
-}
+function replayLast(){if(lastBubbleId)replayBubble(lastBubbleId);}
 
-// ── clear ──
 function clearHistory(){
   window.speechSynthesis&&window.speechSynthesis.cancel();
   clearTimeout(ttsTimer);
-  lastChinese='';lastBubbleId=null;count=0;
+  hideEditPanel();hideLivePanel();
+  lastChinese='';lastBubbleId=null;count=0;pendingUrdu='';
   historyEl.innerHTML=`<div class="empty" id="emptyState">
     <div class="empty-orb">🎙</div>
     <div class="empty-title">بولیں</div>
-    <div class="empty-hint">tap the mic · speak urdu<br>watch it transcribe live<br>hear chinese instantly</div>
+    <div class="empty-hint">tap the mic · speak urdu<br>whisper transcribes live<br>edit if needed · hear chinese</div>
   </div>`;
   setSt('','ready — tap mic and speak in urdu');
 }
 
-// preload voices
 window.speechSynthesis&&window.speechSynthesis.getVoices();
 if(window.speechSynthesis)window.speechSynthesis.onvoiceschanged=()=>window.speechSynthesis.getVoices();
 </script>
