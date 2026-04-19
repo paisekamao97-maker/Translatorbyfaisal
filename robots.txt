@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /app.html
+Disallow: /setup.html
+
+Sitemap: https://zabanlink.app/sitemap.xml

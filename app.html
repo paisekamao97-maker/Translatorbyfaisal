@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="ZabānLink">
+<meta name="theme-color" content="#eee9e0">
+<title>Translator — ZabānLink | Urdu ⇄ Chinese Voice App</title>
+<meta name="description" content="ZabānLink real-time voice translator. Speak Urdu or Chinese and get all translations instantly.">
+<meta name="robots" content="noindex">
+<link rel="stylesheet" href="css/main.css">
+<link rel="stylesheet" href="css/app.css">
+
+<style>
+* { user-select: none; }
+textarea, input { user-select: text; -webkit-user-select: text; }
+html, body {
+  height: 100%; height: -webkit-fill-available;
+  overflow: hidden; position: fixed; width: 100%; top: 0; left: 0;
+}
+@media (min-width: 960px) {
+  body { position: static; overflow: auto; }
+}
+</style>
+</head>
+<body>
+
+<div class="outer-shell">
+
+  <!-- LEFT AD (desktop only) -->
+  <aside class="app-ad-rail" aria-label="Advertisement">
+    <div class="app-ad-slot">
+      <span style="font-size:20px;opacity:.25;">📢</span>
+      <span style="font-size:8px;opacity:.3;text-align:center;line-height:1.6;">Ad · 160×300<br>Available</span>
+    </div>
+    <div class="app-ad-slot" style="height:250px;">
+      <span style="font-size:20px;opacity:.25;">📢</span>
+      <span style="font-size:8px;opacity:.3;text-align:center;line-height:1.6;">Ad · 160×250<br>Available</span>
+    </div>
+  </aside>
+
+  <!-- APP -->
+  <div class="app-shell-wrap">
+
+    <!-- TOPBAR -->
+    <header class="topbar" role="banner">
+      <div class="tb-brand">
+        <div class="tb-logo" aria-hidden="true">🌉</div>
+        <span class="tb-name" aria-label="ZabānLink">ZabānLink</span>
+        <div class="tb-langs" aria-hidden="true">
+          <span class="tb-l ur" lang="ur">اردو</span>
+          <div class="tb-dot"></div>
+          <span class="tb-l zh" lang="zh">中文</span>
+          <div class="tb-dot"></div>
+          <span class="tb-l en">en</span>
+        </div>
+      </div>
+      <div class="tb-right">
+        <a href="index.html" class="icon-btn-sm" title="Home" aria-label="Go to home page">🏠</a>
+        <div class="icon-btn-sm" id="gearBtn" title="Settings" aria-label="Settings / change API key" role="button" tabindex="0">⚙</div>
+      </div>
+    </header>
+
+    <!-- LANG BAR -->
+    <nav class="lang-bar" aria-label="Language selector">
+      <span class="lang-bar-label" id="lang-bar-label">I speak</span>
+      <div class="lang-pills" role="radiogroup" aria-labelledby="lang-bar-label">
+        <div class="lang-pill auto-pill active" id="pill-auto" role="radio" aria-checked="true" tabindex="0" aria-label="Auto-detect language">
+          <span class="pill-main" aria-hidden="true">🔮</span>
+          <span class="pill-sub">auto</span>
+        </div>
+        <div class="lang-pill ur-pill" id="pill-ur" role="radio" aria-checked="false" tabindex="0" aria-label="Urdu">
+          <span class="pill-main" lang="ur">اردو</span>
+          <span class="pill-sub">urdu</span>
+        </div>
+        <div class="lang-pill zh-pill" id="pill-zh" role="radio" aria-checked="false" tabindex="0" aria-label="Chinese">
+          <span class="pill-main" lang="zh">中文</span>
+          <span class="pill-sub">chinese</span>
+        </div>
+        <div class="lang-pill en-pill" id="pill-en" role="radio" aria-checked="false" tabindex="0" aria-label="English">
+          <span class="pill-main">EN</span>
+          <span class="pill-sub">english</span>
+        </div>
+      </div>
+      <div class="mode-badge" aria-label="Two-way translation mode">⇄ 2-way</div>
+    </nav>
+
+    <!-- CHAT HISTORY -->
+    <main class="history" id="history" role="main" aria-label="Translation history" aria-live="polite">
+      <div class="empty" id="emptyState" role="status">
+        <div class="empty-orb" aria-hidden="true">🎙</div>
+        <div class="empty-title" lang="mixed">بولیں · 说吧</div>
+        <div class="empty-hint">
+          person 1 speaks <span lang="ur" style="color:var(--ur);font-family:'Noto Nastaliq Urdu',serif">اردو</span> — bubbles on right<br>
+          person 2 speaks <span lang="zh" style="color:var(--zh);font-family:'Noto Sans SC',sans-serif">中文</span> — bubbles on left<br>
+          all 4 translations in one card · tap 🔊 to play
+        </div>
+      </div>
+    </main>
+
+    <!-- LIVE PANEL -->
+    <div class="live-panel" id="livePanel" role="status" aria-live="polite" aria-label="Recording status">
+      <div class="live-rec-row">
+        <div class="live-rec-dot" aria-hidden="true"></div>
+        <div class="live-rec-label" id="recLabel">listening…</div>
+        <div class="waveform" aria-hidden="true">
+          <div class="wv"></div><div class="wv"></div><div class="wv"></div>
+          <div class="wv"></div><div class="wv"></div><div class="wv"></div>
+        </div>
+      </div>
+      <div class="live-preview" id="livePreview">
+        <div id="detectedBadge" class="detected-badge" style="display:none;" aria-live="polite">
+          🔮 detected: <span id="detectedLangName"></span>
+        </div>
+        <div class="live-preview-text" id="livePreviewText" aria-live="polite"></div>
+      </div>
+    </div>
+
+    <!-- EDIT PANEL -->
+    <section class="edit-panel" id="editPanel" role="dialog" aria-modal="true" aria-label="Review and edit translation">
+      <div class="edit-hdr">
+        <div class="edit-title-txt">✏️ &nbsp;review &amp; edit</div>
+        <div class="edit-live-badge">
+          <div class="edit-live-dot" id="editLiveDot" aria-hidden="true"></div>
+          <span id="editLiveLabel">live translations</span>
+        </div>
+      </div>
+      <nav class="edit-lang-tabs" role="tablist" aria-label="Edit language">
+        <div class="edit-lang-tab ur-tab active" id="tab-ur" role="tab" aria-selected="true" tabindex="0" lang="ur">اردو</div>
+        <div class="edit-lang-tab zh-tab" id="tab-zh" role="tab" aria-selected="false" tabindex="0" lang="zh">中文</div>
+        <div class="edit-lang-tab en-tab" id="tab-en" role="tab" aria-selected="false" tabindex="0">EN</div>
+      </nav>
+
+      <div class="edit-lang-row" id="editRow-ur" role="tabpanel">
+        <div class="edit-lang-row-hdr">
+          <div class="edit-lang-dot ur" aria-hidden="true"></div>
+          <div class="edit-row-label ur" lang="ur">اردو <span class="edit-src-tag" id="srcTag-ur" style="display:none">source</span></div>
+          <span class="edit-translating-tag" id="xlTag-ur" style="display:none" aria-live="polite">translating…</span>
+        </div>
+        <textarea id="editField-ur" class="edit-field ur" placeholder="اردو متن یہاں…" rows="2" dir="rtl"
+          autocorrect="off" autocapitalize="off" spellcheck="false" lang="ur"
+          aria-label="Urdu text"></textarea>
+      </div>
+
+      <div class="edit-lang-row" id="editRow-ro">
+        <div class="edit-lang-row-hdr">
+          <div class="edit-lang-dot ro" aria-hidden="true"></div>
+          <div class="edit-row-label ro">roman urdu</div>
+          <span class="edit-translating-tag" id="xlTag-ro" style="display:none" aria-live="polite">translating…</span>
+        </div>
+        <textarea id="editField-ro" class="edit-field ro" placeholder="roman urdu…" rows="1"
+          autocorrect="off" autocapitalize="off" spellcheck="false" readonly
+          aria-label="Romanized Urdu (read-only)"></textarea>
+      </div>
+
+      <div class="edit-lang-row" id="editRow-zh">
+        <div class="edit-lang-row-hdr">
+          <div class="edit-lang-dot zh" aria-hidden="true"></div>
+          <div class="edit-row-label zh" lang="zh">中文 <span class="edit-src-tag" id="srcTag-zh" style="display:none">source</span></div>
+          <span class="edit-translating-tag" id="xlTag-zh" style="display:none" aria-live="polite">translating…</span>
+        </div>
+        <textarea id="editField-zh" class="edit-field zh" placeholder="中文翻译…" rows="2"
+          autocorrect="off" autocapitalize="off" spellcheck="false" lang="zh"
+          aria-label="Chinese translation"></textarea>
+      </div>
+
+      <div class="edit-lang-row" id="editRow-en">
+        <div class="edit-lang-row-hdr">
+          <div class="edit-lang-dot en" aria-hidden="true"></div>
+          <div class="edit-row-label en">english <span class="edit-src-tag" id="srcTag-en" style="display:none">source</span></div>
+          <span class="edit-translating-tag" id="xlTag-en" style="display:none" aria-live="polite">translating…</span>
+        </div>
+        <textarea id="editField-en" class="edit-field en" placeholder="english translation…" rows="2"
+          autocorrect="off" autocapitalize="off" spellcheck="false"
+          aria-label="English translation"></textarea>
+      </div>
+
+      <div class="edit-foot">
+        <div class="edit-cancel" id="editCancelBtn" role="button" tabindex="0" aria-label="Cancel editing">✕</div>
+        <button class="edit-go" id="editGoBtn" aria-label="Confirm and speak translation">→ speak &amp; add</button>
+      </div>
+    </section>
+
+    <!-- ERROR / BANNER -->
+    <div class="errbox" id="errbox" role="alert" aria-live="assertive"></div>
+    <div class="install-banner" id="installBanner" role="note">
+      💡 <strong>Add to Home Screen:</strong> Safari Share (↑) → "Add to Home Screen" for the full app experience
+    </div>
+
+    <!-- STATUS BAR -->
+    <div class="statusbar" role="status" aria-live="polite">
+      <div class="sdot" id="sdot" aria-hidden="true"></div>
+      <div class="smsg" id="smsg">ready — tap mic and speak in any language</div>
+    </div>
+
+    <!-- MIC CONTROLS -->
+    <div class="controls" role="toolbar" aria-label="Recording controls">
+      <div class="ctrl-btn" id="clearBtn" role="button" tabindex="0" aria-label="Clear conversation" title="Clear">✕</div>
+      <div class="mic-wrap">
+        <button class="mic-btn" id="micBtn" aria-label="Tap to record voice — hold to speak" aria-pressed="false">
+          <svg class="mic-svg" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+            <path d="M12 1a4 4 0 0 1 4 4v6a4 4 0 0 1-8 0V5a4 4 0 0 1 4-4zm0 16a7 7 0 0 0 7-7 1 1 0 0 1 2 0 9 9 0 0 1-8 8.945V21h2a1 1 0 0 1 0 2H9a1 1 0 0 1 0-2h2v-2.055A9 9 0 0 1 3 10a1 1 0 0 1 2 0 7 7 0 0 0 7 7z"/>
+          </svg>
+        </button>
+        <span class="mic-label" id="micLabel" aria-live="polite">tap to speak</span>
+      </div>
+      <div class="ctrl-btn" id="replayBtn" role="button" tabindex="0" aria-label="Replay last translation" title="Replay">▶</div>
+    </div>
+
+  </div><!-- /app-shell-wrap -->
+
+  <!-- RIGHT AD (desktop only) -->
+  <aside class="app-ad-rail" aria-label="Advertisement">
+    <div class="app-ad-slot">
+      <span style="font-size:20px;opacity:.25;">📢</span>
+      <span style="font-size:8px;opacity:.3;text-align:center;line-height:1.6;">Ad · 160×300<br>Available</span>
+    </div>
+  </aside>
+
+</div><!-- /outer-shell -->
+
+<script src="js/shared.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#eee9e0">
+<title>Pricing — ZabānLink | Free Urdu Chinese Translator</title>
+<meta name="description" content="ZabānLink is free forever. Use your own Groq API key — no subscription required. See what's included in the free tier and upcoming Pro features.">
+<link rel="canonical" href="https://zabanlink.app/pricing.html">
+<link rel="stylesheet" href="css/main.css">
+<style>
+.pricing-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 14px;
+  margin-bottom: 32px;
+}
+
+@media (min-width: 520px) {
+  .pricing-grid { grid-template-columns: 1fr 1fr; }
+}
+
+.pricing-note {
+  background: var(--card);
+  border: .5px solid var(--rim);
+  border-radius: var(--radius);
+  padding: 20px;
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+  margin-bottom: 16px;
+}
+
+.pricing-note-icon { font-size: 24px; flex-shrink: 0; }
+.pricing-note-text { font-size: 13px; color: var(--ink2); line-height: 1.8; }
+.pricing-note-text strong { color: var(--goldf); font-weight: 500; }
+
+.faq-list { display: flex; flex-direction: column; gap: 0; border: .5px solid var(--rim); border-radius: var(--radius); overflow: hidden; }
+.faq-item { border-bottom: .5px solid var(--rim); background: var(--card); }
+.faq-item:last-child { border-bottom: none; }
+.faq-q { padding: 16px 18px; font-size: 13px; font-weight: 500; color: var(--ink); cursor: pointer; display: flex; justify-content: space-between; align-items: center; transition: background .15s; }
+.faq-q:hover { background: var(--card2); }
+.faq-q::after { content: '+'; color: var(--gold); font-size: 18px; font-weight: 300; flex-shrink: 0; margin-left: 10px; transition: transform .2s; }
+.faq-item.open .faq-q::after { transform: rotate(45deg); }
+.faq-a { display: none; padding: 0 18px 16px; font-size: 12px; color: var(--ink3); line-height: 1.8; }
+.faq-item.open .faq-a { display: block; }
+
+.coming-soon-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 9px;
+  background: rgba(106,180,232,.08);
+  border: .5px solid rgba(106,180,232,.2);
+  border-radius: 20px;
+  font-size: 9px;
+  color: var(--sky);
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  margin-bottom: 14px;
+}
+</style>
+</head>
+<body>
+
+<div class="page-shell" style="flex-direction:column;">
+
+  <nav class="site-nav" style="position:sticky;top:0;z-index:200;width:100%;">
+    <a href="index.html" class="nav-brand" aria-label="ZabānLink Home">
+      <div class="nav-logo" aria-hidden="true">🌉</div>
+      <span class="nav-name">Zabān<span>Link</span></span>
+    </a>
+    <div class="nav-links">
+      <a href="index.html" class="nav-link">Home</a>
+      <a href="about.html" class="nav-link">About</a>
+      <a href="pricing.html" class="nav-link active">Pricing</a>
+      <a href="app.html" class="nav-cta">Open App →</a>
+    </div>
+  </nav>
+
+  <div style="display:flex;justify-content:center;flex:1;">
+
+    <aside class="ad-rail" aria-label="Advertisement">
+      <div class="ad-slot medium" style="width:160px;height:280px;">
+        <span class="ad-slot-label">Ad</span>
+        <span style="font-size:18px;opacity:.25;">📢</span>
+      </div>
+    </aside>
+
+    <main class="main-col">
+
+      <!-- HERO -->
+      <section style="padding:64px 24px 48px;text-align:center;border-bottom:.5px solid var(--rim);background:radial-gradient(ellipse 80% 50% at 50% 0%,rgba(201,151,58,.08) 0%,transparent 60%);" aria-labelledby="pricing-h">
+        <div class="hero-eyebrow" style="animation:none;display:inline-flex;">
+          <span class="hero-eyebrow-dot" aria-hidden="true"></span>
+          Simple pricing
+        </div>
+        <h1 id="pricing-h" class="hero-title" style="font-size:clamp(36px,10vw,56px);animation:none;">
+          Free forever.<br><em>No surprises.</em>
+        </h1>
+        <p style="font-size:14px;color:var(--ink3);line-height:1.9;max-width:360px;margin:0 auto;">
+          ZabānLink runs on your own free Groq API key. We never charge for translations. The only cost is your API usage — which Groq gives you free.
+        </p>
+      </section>
+
+      <!-- PRICING CARDS -->
+      <section class="section reveal" aria-labelledby="plans-h">
+        <h2 id="plans-h" class="section-title" style="margin-bottom:28px;">Choose your <em>plan</em></h2>
+
+        <div class="pricing-grid" role="list">
+
+          <!-- FREE -->
+          <article class="price-card featured reveal" role="listitem" aria-label="Free plan">
+            <div class="price-badge">✓ Current</div>
+            <div class="price-name">Free Forever</div>
+            <div class="price-amount">$0</div>
+            <div class="price-period">always · no card · no account</div>
+            <ul class="price-features" aria-label="Free plan features">
+              <li>Unlimited voice translations</li>
+              <li lang="ur" style="font-family:'Noto Nastaliq Urdu',serif;">اردو ⇄ 中文 ⇄ English</li>
+              <li>Whisper large-v3 transcription</li>
+              <li>Llama 3.3 70B translation</li>
+              <li>4 translations per phrase</li>
+              <li>Live edit panel</li>
+              <li>Text-to-speech playback</li>
+              <li>Auto-language detection</li>
+              <li>Your API key, your privacy</li>
+              <li>Mobile PWA installable</li>
+            </ul>
+            <a href="setup.html" class="btn-primary" style="width:100%;justify-content:center;" aria-label="Get started with the free plan">Get started free →</a>
+          </article>
+
+          <!-- PRO (coming soon) -->
+          <article class="price-card reveal" role="listitem" aria-label="Pro plan - coming soon">
+            <div class="coming-soon-badge" aria-label="Coming soon">🚀 Coming soon</div>
+            <div class="price-name">Pro</div>
+            <div class="price-amount" style="color:var(--sky);">$4</div>
+            <div class="price-period">/ month · billed monthly</div>
+            <ul class="price-features" aria-label="Pro plan features">
+              <li>Everything in Free</li>
+              <li>Conversation history saved</li>
+              <li>Export transcripts (PDF, TXT)</li>
+              <li>Custom vocabulary / phrasebook</li>
+              <li>Offline mode (downloaded model)</li>
+              <li>Priority support</li>
+              <li>No API key required</li>
+              <li>Team sharing (up to 5 users)</li>
+              <li>Ad-free experience</li>
+            </ul>
+            <button class="btn-ghost" style="width:100%;justify-content:center;cursor:not-allowed;opacity:.5;" disabled aria-label="Pro plan not yet available">Coming soon</button>
+          </article>
+
+        </div>
+
+        <!-- Notes -->
+        <div class="pricing-note reveal" role="note">
+          <div class="pricing-note-icon" aria-hidden="true">💡</div>
+          <div class="pricing-note-text">
+            <strong>How does free work?</strong> ZabānLink uses the Groq API under the hood. You create your own free Groq account and get an API key — Groq gives you generous free usage (millions of tokens per day). ZabānLink never charges you. The only limit is Groq's free tier, which is more than enough for everyday conversation.
+          </div>
+        </div>
+
+        <div class="pricing-note reveal" role="note">
+          <div class="pricing-note-icon" aria-hidden="true">🔒</div>
+          <div class="pricing-note-text">
+            <strong>What about privacy?</strong> Your Groq API key is stored in your browser's localStorage — it <strong>never leaves your device</strong>. ZabānLink has no backend, no database, no user accounts. Voice data goes directly from your browser to Groq's servers via your key.
+          </div>
+        </div>
+      </section>
+
+      <!-- GROQ LIMITS -->
+      <section class="section reveal" aria-labelledby="limits-h">
+        <span class="section-label">groq free tier</span>
+        <h2 id="limits-h" class="section-title">Groq's free limits<br>are <em>very generous</em></h2>
+
+        <div class="how-steps" role="list">
+          <div class="how-step reveal" role="listitem">
+            <div class="how-num" aria-hidden="true">🎤</div>
+            <div class="how-text">
+              <div class="how-label">Whisper Audio</div>
+              <div class="how-desc">2 hours of audio transcription per day on the free tier — enough for hours of conversation.</div>
+            </div>
+          </div>
+          <div class="how-step reveal" role="listitem">
+            <div class="how-num" aria-hidden="true">🧠</div>
+            <div class="how-text">
+              <div class="how-label">Llama Translation</div>
+              <div class="how-desc">30,000 tokens per minute, 500,000 tokens per day — thousands of translations before any limit.</div>
+            </div>
+          </div>
+          <div class="how-step reveal" role="listitem">
+            <div class="how-num" aria-hidden="true">⚡</div>
+            <div class="how-text">
+              <div class="how-label">Inference Speed</div>
+              <div class="how-desc">Groq's LPU delivers 800+ tokens/sec — faster than any other inference provider at this price point ($0).</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- FAQ -->
+      <section class="section reveal" aria-labelledby="faq-h">
+        <span class="section-label">faq</span>
+        <h2 id="faq-h" class="section-title">Questions<br><em>answered</em></h2>
+
+        <div class="faq-list" role="list">
+          <div class="faq-item reveal" role="listitem">
+            <div class="faq-q" role="button" tabindex="0" aria-expanded="false">Do I need to pay anything?</div>
+            <div class="faq-a">No. ZabānLink is completely free. The Groq API also has a generous free tier — no credit card needed. You will never receive a bill from us.</div>
+          </div>
+          <div class="faq-item reveal" role="listitem">
+            <div class="faq-q" role="button" tabindex="0" aria-expanded="false">What if I hit Groq's free limit?</div>
+            <div class="faq-a">Groq's free tier is very generous — most users will never hit it in normal use. If you do, you'll see a "rate limit" message. You can either wait (limits reset daily) or add a small amount of credit to your Groq account.</div>
+          </div>
+          <div class="faq-item reveal" role="listitem">
+            <div class="faq-q" role="button" tabindex="0" aria-expanded="false" lang="ur">کیا اردو میں کام کرتا ہے؟</div>
+            <div class="faq-a" lang="ur">جی ہاں! ZabānLink خاص طور پر اردو کے لیے بنایا گیا ہے۔ ہم Nastaliq script کی ضمانت دیتے ہیں — Roman حروف نہیں۔</div>
+          </div>
+          <div class="faq-item reveal" role="listitem">
+            <div class="faq-q" role="button" tabindex="0" aria-expanded="false" lang="zh">支持中文吗？</div>
+            <div class="faq-a" lang="zh">是的！ZabānLink 专为中文用户设计。我们保证翻译使用中文汉字，而不是拼音。</div>
+          </div>
+          <div class="faq-item reveal" role="listitem">
+            <div class="faq-q" role="button" tabindex="0" aria-expanded="false">Is my data private?</div>
+            <div class="faq-a">Completely. ZabānLink has no backend — your API key lives in your browser only. Voice audio goes directly to Groq's servers (under your own account). We see nothing. Your conversations are never stored.</div>
+          </div>
+          <div class="faq-item reveal" role="listitem">
+            <div class="faq-q" role="button" tabindex="0" aria-expanded="false">Does it work offline?</div>
+            <div class="faq-a">The current free version requires an internet connection to call the Groq API. Offline mode (with a downloaded model) is planned for the upcoming Pro tier.</div>
+          </div>
+          <div class="faq-item reveal" role="listitem">
+            <div class="faq-q" role="button" tabindex="0" aria-expanded="false">Can I add it to my home screen?</div>
+            <div class="faq-a">Yes! On iPhone: Safari → Share (↑) → "Add to Home Screen". On Android: Chrome menu → "Add to Home Screen" or "Install App". It works like a native app.</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- CTA -->
+      <section class="section reveal" style="text-align:center;" aria-labelledby="pricing-cta-h">
+        <h2 id="pricing-cta-h" class="section-title" style="margin-bottom:16px;">
+          Start translating<br><em>for free</em>
+        </h2>
+        <a href="setup.html" class="btn-primary" aria-label="Get started free">🌉 Get started free →</a>
+        <p style="margin-top:14px;font-size:10px;color:var(--ink4);">Takes 2 minutes · No credit card · Works on any device</p>
+      </section>
+
+      <footer class="site-footer" role="contentinfo">
+        <div class="footer-brand">ZabānLink</div>
+        <nav class="footer-links" aria-label="Footer navigation">
+          <a href="index.html" class="footer-link">Home</a>
+          <a href="about.html" class="footer-link">About</a>
+          <a href="pricing.html" class="footer-link">Pricing</a>
+          <a href="app.html" class="footer-link">Translator</a>
+        </nav>
+        <p class="footer-copy">© 2025 ZabānLink · Built by Faisal · Karachi, Pakistan</p>
+      </footer>
+
+    </main>
+
+    <aside class="ad-rail" aria-label="Advertisement">
+      <div class="ad-slot medium" style="width:160px;height:280px;">
+        <span class="ad-slot-label">Ad</span>
+        <span style="font-size:18px;opacity:.25;">📢</span>
+      </div>
+    </aside>
+
+  </div>
+</div>
+
+<script src="js/shared.js"></script>
+<script>
+// FAQ accordion
+document.querySelectorAll('.faq-q').forEach(q => {
+  q.addEventListener('click', () => {
+    const item = q.parentElement;
+    const isOpen = item.classList.contains('open');
+    document.querySelectorAll('.faq-item').forEach(i => { i.classList.remove('open'); i.querySelector('.faq-q').setAttribute('aria-expanded','false'); });
+    if (!isOpen) { item.classList.add('open'); q.setAttribute('aria-expanded','true'); }
+  });
+  q.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); q.click(); } });
+});
+</script>
+</body>
+</html>

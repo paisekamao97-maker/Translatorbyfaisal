@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="ZabānLink">
+<meta name="theme-color" content="#eee9e0">
+<title>Setup — ZabānLink | Urdu ⇄ Chinese Voice Translator</title>
+<meta name="description" content="One-time setup for ZabānLink. Get a free Groq API key and start translating between Urdu, Chinese, and English instantly.">
+<meta name="robots" content="noindex">
+<link rel="stylesheet" href="css/main.css">
+<style>
+html, body { height: 100%; overflow-y: auto; }
+
+.setup-page { min-height:100vh; display:flex; flex-direction:column; background:var(--bg); }
+
+.setup-wrap {
+  flex:1; display:flex; flex-direction:column; align-items:center;
+  padding:80px 24px 48px; max-width:450px; margin:0 auto; width:100%;
+}
+
+.setup-logo {
+  width:84px; height:84px; border-radius:26px;
+  background:linear-gradient(135deg, rgba(168,115,42,0.16), rgba(30,122,80,0.10));
+  border:1px solid var(--glass-border);
+  display:flex; align-items:center; justify-content:center; font-size:38px;
+  margin-bottom:22px;
+  box-shadow:var(--shadow-md), var(--shadow-inner);
+}
+
+.setup-brand {
+  font-family:'Playfair Display', serif;
+  font-size:34px; font-weight:400; font-style:italic; color:var(--gold); margin-bottom:6px;
+}
+
+.setup-tagline { font-size:11px; color:var(--ink4); letter-spacing:.14em; text-transform:uppercase; margin-bottom:6px; font-weight:600; }
+
+.setup-langs { display:flex; align-items:center; gap:9px; margin-bottom:38px; }
+.sl { font-size:14px; font-weight:500; }
+.sl.ur { font-family:'Noto Nastaliq Urdu',serif; color:var(--ur); font-size:19px; }
+.sl.zh { font-family:'Noto Sans SC',sans-serif; color:var(--zh); }
+.sl.en { color:var(--en); }
+.s-arr { color:var(--ink5); font-size:11px; }
+
+.setup-card {
+  width:100%;
+  background:var(--glass-white);
+  backdrop-filter:var(--blur);
+  -webkit-backdrop-filter:var(--blur);
+  border:1px solid var(--glass-border);
+  border-radius:var(--radius-lg);
+  overflow:hidden; margin-bottom:13px;
+  box-shadow:var(--shadow-md), var(--shadow-inner);
+}
+
+.setup-card-head {
+  padding:14px 20px;
+  border-bottom:1px solid var(--glass-border2);
+  display:flex; align-items:center; justify-content:space-between;
+  background:rgba(255,255,255,0.4);
+}
+
+.setup-card-title { font-size:9px; letter-spacing:.24em; color:var(--ink3); text-transform:uppercase; font-weight:700; }
+
+.free-pill {
+  display:inline-flex; align-items:center; gap:4px;
+  padding:3px 10px;
+  background:var(--jade-soft);
+  border:1px solid var(--jade-border);
+  border-radius:50px; font-size:9px; color:var(--jade);
+  letter-spacing:.1em; text-transform:uppercase; font-weight:700;
+}
+
+.step-row {
+  display:flex; gap:14px; align-items:flex-start;
+  padding:14px 20px; border-bottom:1px solid var(--glass-border2);
+}
+.step-row:last-child { border-bottom:none; }
+
+.step-n {
+  width:24px; height:24px; border-radius:50%;
+  background:var(--gold-tint); border:1px solid var(--gold-strong);
+  font-size:11px; color:var(--goldd); font-weight:700;
+  display:flex; align-items:center; justify-content:center;
+  flex-shrink:0; margin-top:1px;
+  box-shadow:var(--shadow-xs);
+}
+
+.step-text { font-size:12px; color:var(--ink2); line-height:1.75; }
+.step-text a { color:var(--gold); text-decoration:none; font-weight:600; }
+.step-text strong { color:var(--ink); font-weight:600; }
+
+.key-card {
+  width:100%;
+  background:var(--glass-white);
+  backdrop-filter:var(--blur);
+  -webkit-backdrop-filter:var(--blur);
+  border:1px solid var(--glass-border);
+  border-radius:var(--radius-lg);
+  padding:20px; margin-bottom:13px;
+  box-shadow:var(--shadow-md), var(--shadow-inner);
+}
+.key-label { font-size:9px; letter-spacing:.24em; color:var(--ink3); text-transform:uppercase; margin-bottom:10px; font-weight:700; }
+.key-field { position:relative; display:flex; align-items:center; }
+
+.key-input {
+  width:100%;
+  background:rgba(255,255,255,0.70);
+  border:1px solid var(--glass-border2);
+  border-radius:var(--radius-sm);
+  padding:14px 46px 14px 15px;
+  font-family:'Plus Jakarta Sans', monospace;
+  font-size:12px; color:var(--ink); outline:none;
+  -webkit-appearance:none;
+  transition:border-color .2s, box-shadow .2s;
+  box-shadow:var(--shadow-inner);
+}
+.key-input:focus { border-color:var(--gold-strong); box-shadow:0 0 0 3px rgba(168,115,42,0.12), var(--shadow-inner); }
+.key-input::placeholder { color:var(--ink5); }
+
+.eye-btn {
+  position:absolute; right:13px;
+  background:none; border:none; color:var(--ink4);
+  font-size:16px; cursor:pointer; padding:4px; line-height:1;
+  transition:color .15s;
+}
+.eye-btn:hover { color:var(--gold); }
+
+.key-hint { font-size:10px; color:var(--ink4); margin-top:9px; display:flex; align-items:center; gap:6px; font-weight:500; }
+.key-hint-dot { width:5px; height:5px; border-radius:50%; background:var(--jade); box-shadow:0 0 6px rgba(30,122,80,0.3); flex-shrink:0; }
+
+.cta-btn {
+  width:100%; padding:17px;
+  background:var(--gold); border:none; border-radius:var(--radius-sm);
+  font-family:'Plus Jakarta Sans', sans-serif;
+  font-size:13px; font-weight:700; letter-spacing:.12em; text-transform:uppercase;
+  color:#fff; cursor:pointer;
+  box-shadow:var(--shadow-gold);
+  transition:all .2s; margin-bottom:16px;
+}
+.cta-btn:disabled { opacity:.25; cursor:not-allowed; box-shadow:none; }
+.cta-btn:not(:disabled):hover { background:var(--goldf); transform:translateY(-2px); box-shadow:0 12px 36px rgba(168,115,42,0.28); }
+.cta-btn:active { transform:scale(.97); }
+
+.setup-note { font-size:10px; color:var(--ink4); text-align:center; line-height:2.1; letter-spacing:.04em; }
+
+.back-link {
+  display:inline-flex; align-items:center; gap:6px;
+  font-size:11px; color:var(--ink3); text-decoration:none;
+  margin-top:22px; font-weight:500; transition:color .15s;
+}
+.back-link:hover { color:var(--gold); }
+
+.existing-key-bar {
+  display:none; width:100%;
+  background:var(--jade-soft);
+  border:1px solid var(--jade-border);
+  border-radius:var(--radius-sm);
+  padding:13px 18px; font-size:11px; color:var(--jade);
+  margin-bottom:13px;
+  align-items:center; gap:10px; font-weight:500;
+  box-shadow:var(--shadow-xs), var(--shadow-inner);
+}
+.existing-key-bar.show { display:flex; }
+
+.go-app-btn {
+  margin-left:auto; padding:7px 16px;
+  background:var(--jade); color:#fff; border:none; border-radius:8px;
+  font-size:10px; font-weight:700; cursor:pointer; text-decoration:none;
+  white-space:nowrap; transition:all .15s; letter-spacing:.06em;
+  box-shadow:0 2px 8px rgba(30,122,80,0.2);
+}
+.go-app-btn:hover { opacity:.88; transform:translateY(-1px); }
+</style>
+</head>
+<body>
+
+<div class="setup-page">
+  <!-- Minimal nav -->
+  <nav class="site-nav" style="position:relative;z-index:10;">
+    <a href="index.html" class="nav-brand" aria-label="ZabānLink Home">
+      <div class="nav-logo" aria-hidden="true">🌉</div>
+      <span class="nav-name">Zabān<span>Link</span></span>
+    </a>
+    <div class="nav-links">
+      <a href="index.html" class="nav-link">← Home</a>
+    </div>
+  </nav>
+
+  <div class="setup-wrap">
+    <div class="setup-logo" aria-hidden="true">🌉</div>
+    <div class="setup-brand">ZabānLink</div>
+    <div class="setup-tagline" aria-label="Voice Bridge">Voice Bridge</div>
+    <div class="setup-langs" aria-label="Languages: Urdu, Chinese, English">
+      <span class="sl ur" lang="ur">اردو</span>
+      <span class="s-arr" aria-hidden="true">⇄</span>
+      <span class="sl zh" lang="zh">中文</span>
+      <span class="s-arr" aria-hidden="true">⇄</span>
+      <span class="sl en">English</span>
+    </div>
+
+    <!-- Existing key notice -->
+    <div class="existing-key-bar" id="existingKeyBar" role="status">
+      <span>✅ Key already saved</span>
+      <a href="app.html" class="go-app-btn">Open Translator →</a>
+    </div>
+
+    <!-- Steps card -->
+    <div class="setup-card" role="region" aria-label="Setup steps">
+      <div class="setup-card-head">
+        <span class="setup-card-title">One-time setup</span>
+        <span class="free-pill">✓ FREE</span>
+      </div>
+      <div class="step-row">
+        <div class="step-n" aria-label="Step 1">1</div>
+        <div class="step-text">
+          Go to <a href="https://console.groq.com" target="_blank" rel="noopener noreferrer">console.groq.com</a> — free account, <strong>no credit card ever.</strong>
+        </div>
+      </div>
+      <div class="step-row">
+        <div class="step-n" aria-label="Step 2">2</div>
+        <div class="step-text">Click <strong>API Keys → Create → Copy</strong> the key.</div>
+      </div>
+      <div class="step-row">
+        <div class="step-n" aria-label="Step 3">3</div>
+        <div class="step-text">Paste it below. It's stored <strong>only on this device</strong> in your browser.</div>
+      </div>
+    </div>
+
+    <!-- Key input -->
+    <div class="key-card" role="form" aria-label="API key entry">
+      <div class="key-label" id="key-label">Groq API Key</div>
+      <div class="key-field">
+        <input
+          type="password"
+          id="keyInput"
+          class="key-input"
+          placeholder="gsk_xxxxxxxxxxxxxxxxxxxxxxxx"
+          autocomplete="off"
+          autocorrect="off"
+          autocapitalize="none"
+          spellcheck="false"
+          aria-label="Groq API Key"
+          aria-describedby="key-hint"
+        >
+        <button class="eye-btn" id="eyeBtn" aria-label="Toggle key visibility" type="button">👁</button>
+      </div>
+      <div class="key-hint" id="key-hint">
+        <span class="key-hint-dot" aria-hidden="true"></span>
+        Stored locally · never sent to our servers
+      </div>
+    </div>
+
+    <button class="cta-btn" id="ctaBtn" disabled aria-label="Save key and open ZabānLink">
+      Open ZabānLink →
+    </button>
+
+    <p class="setup-note" role="note">
+      Groq free tier · Works globally ✓<br>
+      No card ever · 2-way translation ⇄<br>
+      Private · key stays on your device 🔒
+    </p>
+
+    <a href="index.html" class="back-link" aria-label="Back to home page">← back to home</a>
+  </div>
+</div>
+
+<script src="js/shared.js"></script>
+<script>
+'use strict';
+const keyInput = document.getElementById('keyInput');
+const ctaBtn   = document.getElementById('ctaBtn');
+const eyeBtn   = document.getElementById('eyeBtn');
+const existingBar = document.getElementById('existingKeyBar');
+
+// Check if key already exists
+const saved = localStorage.getItem('vb_key');
+if (saved && saved.startsWith('gsk_')) {
+  existingBar.classList.add('show');
+}
+
+keyInput.addEventListener('input', () => {
+  ctaBtn.disabled = keyInput.value.trim().length < 20;
+});
+
+eyeBtn.addEventListener('click', () => {
+  keyInput.type = keyInput.type === 'password' ? 'text' : 'password';
+  eyeBtn.textContent = keyInput.type === 'password' ? '👁' : '🙈';
+});
+
+ctaBtn.addEventListener('click', () => {
+  const k = keyInput.value.trim();
+  if (!k || k.length < 20) {
+    showToast('Please enter a valid Groq key (starts with gsk_)');
+    return;
+  }
+  if (!k.startsWith('gsk_')) {
+    showToast('Key should start with gsk_ — check and try again');
+    return;
+  }
+  localStorage.setItem('vb_key', k);
+  ctaBtn.textContent = '✓ Saved! Opening…';
+  ctaBtn.disabled = true;
+  setTimeout(() => window.location.href = 'app.html', 600);
+});
+
+// Enter key shortcut
+keyInput.addEventListener('keydown', e => {
+  if (e.key === 'Enter' && !ctaBtn.disabled) ctaBtn.click();
+});
+</script>
+</body>
+</html>

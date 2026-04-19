@@ -1,876 +1,617 @@
 <!DOCTYPE html>
-<html lang="ur">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="آواز Bridge">
-<title>آواز — Voice Bridge</title>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Nastaliq+Urdu:wght@400;600&family=Noto+Sans+SC:wght@300;400&family=Instrument+Serif:ital@0;1&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="ZabānLink">
+<meta name="theme-color" content="#eee9e0">
+
+<!-- ═══ SEO ═══ -->
+<title>ZabānLink — Urdu ⇄ Chinese Voice Translator | اردو ⇄ 中文 | Free AI Translator</title>
+<meta name="description" content="ZabānLink is a free, real-time Urdu ↔ Chinese ↔ English voice translator. Speak, see all 4 translations instantly, and play them aloud. Powered by Whisper AI + Llama. No app download needed. Works in your browser.">
+<meta name="keywords" content="Urdu Chinese translator, اردو چینی ترجمہ, 乌尔都语中文翻译, voice translator Urdu, Urdu to Chinese, Chinese to Urdu, free translation app, AI translator, Pakistan China translator, CPEC translator, real-time translation, Whisper AI translation, اردو انگریزی ترجمہ">
+<meta name="author" content="Faisal">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://zabanlink.app/">
+
+<!-- Open Graph -->
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://zabanlink.app/">
+<meta property="og:title" content="ZabānLink — Free Urdu ⇄ Chinese Voice Translator">
+<meta property="og:description" content="Real-time voice translation between Urdu, Chinese, and English. Free, browser-based, powered by Whisper AI.">
+<meta property="og:image" content="https://zabanlink.app/assets/og-cover.png">
+
+<!-- Twitter -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="ZabānLink — Urdu ⇄ Chinese Voice Translator">
+<meta name="twitter:description" content="Free real-time voice translation. Speak Urdu or Chinese and hear the other side instantly.">
+
+<!-- Schema.org -->
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@type":"WebApplication",
+  "name":"ZabānLink",
+  "alternateName":"زبان لنک",
+  "description":"Free real-time Urdu ↔ Chinese ↔ English voice translator powered by Whisper AI and Llama LLM",
+  "url":"https://zabanlink.app",
+  "applicationCategory":"UtilitiesApplication",
+  "operatingSystem":"Any",
+  "offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},
+  "author":{"@type":"Person","name":"Faisal"},
+  "inLanguage":["ur","zh","en"],
+  "keywords":"Urdu Chinese translator, voice translation, AI translator"
+}
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="css/main.css">
+
 <style>
-:root {
-  --bg:    #f0ece3;
-  --card:  #e8e4db;
-  --s1:    #d4d7f0;
-  --s2:    #f2d4d4;
-  --s3:    #c8eed8;
-  --rim:   #b0aead;
-  --rim2:  #5a5860;
-  --gold:  #c9973a;
-  --goldf: #e8be6a;
-  --goldd: #7a5a18;
-  --jade:  #3ec98a;
-  --red:   #e05555;
-  --ink:   #12100e;
-  --ink2:  #2d2a26;
-  --ink3:  #5a5650;
-  --ur-c:  #1a0a40;
-  --ro-c:  #3d4a2a;
-  --zh-c:  #2a1a00;
-  --en-c:  #002040;
-}
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;user-select:none;}
-
-/* iOS full-height + no bounce bleed */
-html{height:100%;height:-webkit-fill-available;}
-body{
-  height:100%;height:-webkit-fill-available;
-  background:var(--bg);color:var(--ink);
-  font-family:'DM Sans',sans-serif;
-  overflow:hidden;
-  position:fixed;width:100%;top:0;left:0;
+/* ─── Hero animated script ─── */
+.hero-script-bg {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  z-index: 0;
+  pointer-events: none;
 }
 
-/* ══ SETUP ══ */
-#setup{position:fixed;inset:0;z-index:999;background:var(--bg);display:flex;flex-direction:column;overflow-y:auto;-webkit-overflow-scrolling:touch;}
-.setup-inner{flex:1;display:flex;flex-direction:column;align-items:center;padding:0 22px;padding-top:max(env(safe-area-inset-top,0px),44px);padding-bottom:max(env(safe-area-inset-bottom,0px),36px);}
-.logo-ring{width:80px;height:80px;border-radius:50%;border:1px solid var(--rim2);background:radial-gradient(circle at 38% 38%,var(--s3),var(--s1));display:flex;align-items:center;justify-content:center;font-size:34px;margin-bottom:16px;}
-.setup-eyebrow{font-size:10px;letter-spacing:0.28em;color:var(--ink3);text-transform:uppercase;margin-bottom:4px;}
-.setup-title{font-family:'Instrument Serif',serif;font-size:28px;color:var(--ink);margin-bottom:4px;}
-.setup-langs{display:flex;align-items:center;gap:6px;margin-bottom:28px;flex-wrap:wrap;justify-content:center;}
-.sl{font-size:13px;font-weight:500;}
-.sl.ur{font-family:'Noto Nastaliq Urdu',serif;color:var(--ur-c);}
-.sl.ro{font-style:italic;color:var(--ro-c);}
-.sl.zh{font-family:'Noto Sans SC',sans-serif;color:var(--gold);}
-.sl.en{color:var(--en-c);}
-.s-arr{color:var(--ink3);font-size:10px;opacity:0.5;}
-.steps-card{width:100%;background:var(--s1);border:0.5px solid var(--rim);border-radius:18px;overflow:hidden;margin-bottom:10px;}
-.steps-head{padding:11px 16px;border-bottom:0.5px solid var(--rim);font-size:9px;letter-spacing:0.2em;color:var(--ink3);text-transform:uppercase;display:flex;align-items:center;gap:8px;}
-.free-pill{background:rgba(62,201,138,0.12);border:0.5px solid rgba(62,201,138,0.3);border-radius:20px;padding:2px 8px;font-size:9px;color:var(--jade);}
-.step-row{display:flex;gap:11px;align-items:flex-start;padding:11px 16px;border-bottom:0.5px solid var(--rim);}
-.step-row:last-child{border-bottom:none;}
-.step-n{width:20px;height:20px;border-radius:50%;background:var(--s2);border:0.5px solid var(--rim2);font-size:10px;color:var(--gold);display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;}
-.step-text{font-size:12px;color:var(--ink2);line-height:1.6;}
-.step-text a{color:var(--goldf);text-decoration:none;font-weight:500;}
-.step-text strong{color:var(--ink);font-weight:500;}
-.key-card{width:100%;background:var(--s1);border:0.5px solid var(--rim);border-radius:18px;padding:16px;margin-bottom:10px;}
-.key-label{font-size:9px;letter-spacing:0.2em;color:var(--ink3);text-transform:uppercase;margin-bottom:9px;}
-.key-field{position:relative;display:flex;align-items:center;}
-.key-input{width:100%;background:var(--s2);border:0.5px solid var(--rim2);border-radius:10px;padding:13px 44px 13px 14px;font-family:'DM Sans',monospace;font-size:12px;color:var(--ink);outline:none;-webkit-appearance:none;}
-.key-input::placeholder{color:var(--ink3);}
-.eye-btn{position:absolute;right:12px;background:none;border:none;color:var(--ink3);font-size:16px;cursor:pointer;padding:4px;line-height:1;}
-.cta{width:100%;padding:15px;background:var(--gold);border:none;border-radius:12px;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:500;letter-spacing:0.12em;text-transform:uppercase;color:#07080f;cursor:pointer;transition:opacity 0.15s,transform 0.1s;margin-bottom:14px;}
-.cta:disabled{opacity:0.25;cursor:not-allowed;}
-.cta:active{transform:scale(0.97);opacity:0.9;}
-.setup-note{font-size:10px;color:var(--ink3);text-align:center;line-height:1.9;}
-
-/* ══ APP — flex column, fills fixed body ══ */
-#app{display:none;flex-direction:column;height:100%;height:-webkit-fill-available;overflow:hidden;}
-
-.topbar{display:flex;align-items:center;justify-content:space-between;padding:max(env(safe-area-inset-top,0px),14px) 18px 12px;border-bottom:0.5px solid var(--rim);flex-shrink:0;}
-.tb-brand{display:flex;align-items:baseline;gap:8px;}
-.tb-name{font-family:'Instrument Serif',serif;font-size:20px;color:var(--ink);}
-.tb-langs{display:flex;align-items:center;gap:4px;opacity:0.65;}
-.tb-l{font-size:10px;}
-.tb-l.ur{font-family:'Noto Nastaliq Urdu',serif;color:var(--ur-c);}
-.tb-l.ro{font-style:italic;color:var(--ro-c);}
-.tb-l.zh{font-family:'Noto Sans SC',sans-serif;color:var(--gold);}
-.tb-l.en{color:var(--en-c);}
-.tb-dot{width:3px;height:3px;border-radius:50%;background:var(--rim);flex-shrink:0;}
-.gear-btn{width:34px;height:34px;border-radius:50%;background:var(--s1);border:0.5px solid var(--rim);display:flex;align-items:center;justify-content:center;font-size:15px;cursor:pointer;color:var(--ink3);transition:all 0.15s;}
-.gear-btn:active{transform:scale(0.88);}
-
-/* ══ LANGUAGE BAR ══ */
-.lang-bar{display:flex;align-items:center;padding:8px 14px;gap:6px;border-bottom:0.5px solid var(--rim);flex-shrink:0;background:var(--bg);}
-.lang-bar-label{font-size:8px;letter-spacing:0.16em;color:var(--ink3);text-transform:uppercase;margin-right:2px;flex-shrink:0;}
-.lang-pills{display:flex;gap:5px;flex:1;}
-.lang-pill{flex:1;padding:7px 4px;border-radius:9px;border:0.5px solid var(--rim);background:var(--s1);font-size:10px;font-weight:500;color:var(--ink3);cursor:pointer;transition:all 0.18s;text-align:center;display:flex;flex-direction:column;align-items:center;gap:1px;line-height:1.2;}
-.lang-pill .pill-main{font-size:11px;}
-.lang-pill .pill-sub{font-size:8px;opacity:0.65;font-weight:400;}
-.lang-pill.ur-pill{font-family:'Noto Nastaliq Urdu',serif;}
-.lang-pill.zh-pill{font-family:'Noto Sans SC',sans-serif;}
-.lang-pill.active{border-color:var(--gold);background:rgba(201,151,58,0.1);color:var(--goldd);}
-.lang-pill.active.ur-pill{color:var(--ur-c);border-color:var(--ur-c);background:rgba(26,10,64,0.06);}
-.lang-pill.active.zh-pill{color:var(--zh-c);border-color:var(--gold);background:rgba(201,151,58,0.1);}
-.lang-pill.active.en-pill{color:var(--en-c);border-color:var(--en-c);background:rgba(0,32,64,0.06);}
-.auto-pill{flex:1;padding:7px 4px;border-radius:9px;border:0.5px dashed var(--jade);background:rgba(62,201,138,0.04);font-size:10px;font-weight:500;color:var(--ink3);cursor:pointer;transition:all 0.18s;text-align:center;display:flex;flex-direction:column;align-items:center;gap:1px;line-height:1.2;}
-.auto-pill .pill-main{font-size:11px;}
-.auto-pill .pill-sub{font-size:8px;opacity:0.65;font-weight:400;}
-.auto-pill.active{border-color:var(--jade);background:rgba(62,201,138,0.09);color:#1a6644;}
-.mode-badge{display:flex;align-items:center;gap:4px;padding:3px 8px;border-radius:20px;background:rgba(62,201,138,0.08);border:0.5px solid rgba(62,201,138,0.25);font-size:8px;color:var(--jade);letter-spacing:0.1em;text-transform:uppercase;flex-shrink:0;}
-
-/* ── HISTORY: flex:1 + min-height:0 is THE iOS scroll fix ── */
-.history{
-  flex:1;
-  min-height:0;
-  overflow-y:auto;
-  overflow-x:hidden;
-  padding:12px 14px 6px;
-  display:flex;
-  flex-direction:column;
-  gap:10px;
-  -webkit-overflow-scrolling:touch;
-  overscroll-behavior:contain;
-}
-.history::-webkit-scrollbar{display:none;}
-
-.empty{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:40px 16px;}
-.empty-orb{width:88px;height:88px;border-radius:50%;background:var(--s1);border:1px solid var(--rim);display:flex;align-items:center;justify-content:center;font-size:36px;}
-.empty-title{font-family:'Instrument Serif',serif;font-size:24px;color:var(--ink2);}
-.empty-hint{font-size:11px;color:var(--ink3);text-align:center;line-height:2.1;letter-spacing:0.03em;}
-
-/* ── LIVE PANEL ── */
-.live-panel{margin:0 14px 6px;background:var(--s1);border:0.5px solid var(--rim2);border-radius:16px;overflow:hidden;display:none;flex-direction:column;flex-shrink:0;}
-.live-panel.show{display:flex;}
-.live-rec-row{display:flex;align-items:center;gap:9px;padding:10px 14px;border-bottom:0.5px solid var(--rim);}
-.live-rec-dot{width:7px;height:7px;border-radius:50%;background:var(--red);animation:blink 0.8s infinite;flex-shrink:0;}
-.live-rec-label{font-size:9px;letter-spacing:0.18em;color:var(--ink3);text-transform:uppercase;flex:1;}
-.waveform{display:flex;align-items:center;gap:2px;height:16px;}
-.wv{width:3px;border-radius:3px;background:var(--red);opacity:0.6;}
-.wv:nth-child(1){animation:wave 0.9s 0.0s infinite ease-in-out;}
-.wv:nth-child(2){animation:wave 0.9s 0.1s infinite ease-in-out;}
-.wv:nth-child(3){animation:wave 0.9s 0.2s infinite ease-in-out;}
-.wv:nth-child(4){animation:wave 0.9s 0.3s infinite ease-in-out;}
-.wv:nth-child(5){animation:wave 0.9s 0.15s infinite ease-in-out;}
-.wv:nth-child(6){animation:wave 0.9s 0.05s infinite ease-in-out;}
-@keyframes wave{0%,100%{height:3px}50%{height:14px}}
-.live-preview{padding:10px 14px;display:none;}
-.live-preview.show{display:block;}
-.live-preview-text{font-size:15px;color:var(--ink2);line-height:1.8;}
-.live-preview-text.ur{font-family:'Noto Nastaliq Urdu',serif;font-size:18px;color:var(--ur-c);direction:rtl;}
-.live-preview-text.zh{font-family:'Noto Sans SC',sans-serif;color:var(--zh-c);}
-.detected-badge{display:inline-flex;align-items:center;gap:5px;background:rgba(62,201,138,0.1);border:0.5px solid rgba(62,201,138,0.3);border-radius:20px;padding:2px 9px;font-size:9px;color:#1a6644;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:5px;}
-
-/* ── EDIT PANEL ── */
-.edit-panel{margin:0 14px 6px;background:#fffcf0;border:1.5px solid var(--gold);border-radius:16px;overflow:hidden;display:none;flex-direction:column;animation:slideUp 0.22s cubic-bezier(0.2,0,0,1);flex-shrink:0;}
-.edit-panel.show{display:flex;}
-@keyframes slideUp{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
-.edit-hdr{display:flex;align-items:center;justify-content:space-between;padding:9px 13px;background:rgba(201,151,58,0.07);border-bottom:1px solid rgba(201,151,58,0.2);}
-.edit-title-txt{font-size:9px;letter-spacing:0.2em;color:var(--goldd);text-transform:uppercase;font-weight:500;}
-.edit-hint-txt{font-size:9px;color:var(--ink3);font-style:italic;}
-.edit-body{padding:11px 13px;border-bottom:1px solid rgba(201,151,58,0.15);}
-.edit-ur-label{font-size:8px;letter-spacing:0.18em;color:var(--ink3);text-transform:uppercase;margin-bottom:5px;}
-.edit-textarea{width:100%;font-size:14px;color:var(--ink2);line-height:1.8;background:transparent;border:none;outline:none;resize:none;-webkit-appearance:none;user-select:text;-webkit-user-select:text;min-height:56px;padding:2px;caret-color:var(--gold);}
-.edit-textarea.ur{font-family:'Noto Nastaliq Urdu',serif;font-size:19px;color:var(--ur-c);direction:rtl;}
-.edit-textarea.zh{font-family:'Noto Sans SC',sans-serif;color:var(--zh-c);}
-.edit-textarea::placeholder{color:rgba(201,151,58,0.3);font-size:15px;}
-.edit-foot{display:flex;gap:8px;padding:9px 13px;align-items:center;}
-/* Cancel inside the edit panel — this is the ONLY cancel for this action */
-.edit-cancel{width:40px;height:40px;border-radius:50%;background:rgba(224,85,85,0.07);border:0.5px solid rgba(224,85,85,0.22);display:flex;align-items:center;justify-content:center;font-size:14px;cursor:pointer;color:var(--red);flex-shrink:0;transition:all 0.15s;}
-.edit-cancel:active{transform:scale(0.88);}
-.edit-go{flex:1;padding:12px;background:var(--gold);border:none;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:11px;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;color:#07080f;cursor:pointer;transition:opacity 0.15s,transform 0.1s;}
-.edit-go:active{transform:scale(0.96);}
-.edit-go:disabled{opacity:0.28;cursor:not-allowed;transform:none!important;}
-
-/* ── BUBBLE ── */
-.bubble{animation:riseUp 0.3s cubic-bezier(0.2,0,0,1);flex-shrink:0;}
-@keyframes riseUp{from{opacity:0;transform:translateY(10px) scale(0.99);}to{opacity:1;transform:translateY(0) scale(1);}}
-.bcard{background:var(--card);border:0.5px solid var(--rim);border-radius:16px;overflow:hidden;transition:border-color 0.25s,box-shadow 0.25s;}
-.bcard.speaking{border-color:var(--goldd);box-shadow:0 0 0 1px var(--goldd),0 0 24px rgba(201,151,58,0.09);}
-.bdir-strip{padding:4px 11px;font-size:8px;letter-spacing:0.14em;text-transform:uppercase;display:flex;align-items:center;gap:6px;border-bottom:0.5px solid var(--rim);}
-.bdir-strip.ur-to-zh{background:rgba(26,10,64,0.04);color:var(--ur-c);}
-.bdir-strip.zh-to-ur{background:rgba(42,26,0,0.04);color:var(--zh-c);}
-.bdir-strip.en-to-ur{background:rgba(0,32,64,0.04);color:var(--en-c);}
-.brow{display:flex;align-items:stretch;border-bottom:0.5px solid var(--rim);}
-.brow:last-of-type{border-bottom:none;}
-.brow-flag{width:24px;flex-shrink:0;display:flex;align-items:center;justify-content:center;padding-left:9px;}
-.brow-flag-dot{width:5px;height:5px;border-radius:50%;}
-.brow-flag-dot.ur{background:var(--ur-c);}
-.brow-flag-dot.ro{background:var(--ro-c);}
-.brow-flag-dot.zh{background:var(--gold);}
-.brow-flag-dot.en{background:var(--en-c);}
-.brow-flag-dot.src{width:7px;height:7px;box-shadow:0 0 0 2px rgba(201,151,58,0.3);}
-.brow-content{flex:1;padding:7px 9px 7px 5px;min-width:0;}
-.brow-label{font-size:7px;letter-spacing:0.16em;text-transform:uppercase;margin-bottom:1px;opacity:0.5;}
-.brow-label.ur{color:var(--ur-c);}
-.brow-label.ro{color:var(--ro-c);}
-.brow-label.zh{color:var(--gold);}
-.brow-label.en{color:var(--en-c);}
-.brow-label .src-tag{opacity:1;background:rgba(201,151,58,0.15);border-radius:3px;padding:0 3px;font-size:6px;color:var(--goldd);}
-.brow-text.ur{font-family:'Noto Nastaliq Urdu',serif;font-size:17px;color:var(--ur-c);direction:rtl;line-height:1.85;text-align:right;}
-.brow-text.ro{font-family:'DM Sans',sans-serif;font-style:italic;font-size:12px;color:var(--ro-c);line-height:1.45;font-weight:300;}
-.brow-text.zh{font-family:'Noto Sans SC',sans-serif;font-size:19px;color:var(--zh-c);line-height:1.35;font-weight:300;letter-spacing:0.02em;}
-.brow-text.en{font-family:'DM Sans',sans-serif;font-size:12px;color:var(--en-c);line-height:1.45;font-weight:300;}
-.zh-char{display:inline;transition:color 0.12s,text-shadow 0.12s;}
-.zh-char.lit{color:var(--goldf);text-shadow:0 0 16px rgba(232,190,106,0.55);}
-.brow-actions{display:flex;flex-direction:column;gap:4px;padding:0 9px 0 3px;align-items:center;justify-content:center;flex-shrink:0;}
-.icon-btn{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:12px;transition:all 0.15s;}
-.icon-btn:active{transform:scale(0.85);}
-.spk-btn{background:var(--s2);border:0.5px solid var(--rim2);color:var(--ink3);}
-.spk-btn.on{background:rgba(201,151,58,0.12);border-color:var(--gold);color:var(--gold);}
-.edt-btn{background:rgba(201,151,58,0.07);border:0.5px solid rgba(201,151,58,0.25);color:var(--goldd);}
-.bfoot{display:flex;align-items:center;justify-content:space-between;padding:4px 11px 6px;}
-.bfoot-time{font-size:8px;color:var(--ink3);}
-.bfoot-badge{font-size:8px;color:var(--goldd);letter-spacing:0.1em;text-transform:uppercase;}
-
-/* ── STATUS ── */
-.statusbar{margin:4px 14px 5px;background:var(--s1);border:0.5px solid var(--rim);border-radius:10px;padding:9px 13px;display:flex;align-items:center;gap:9px;flex-shrink:0;}
-.sdot{width:7px;height:7px;border-radius:50%;background:var(--rim2);flex-shrink:0;transition:background 0.2s;}
-.sdot.rec{background:var(--red);animation:blink 0.9s infinite;}
-.sdot.proc{background:var(--gold);animation:blink 0.5s infinite;}
-.sdot.ok{background:var(--jade);}
-@keyframes blink{0%,100%{opacity:1}50%{opacity:0.12}}
-.smsg{font-size:11px;color:var(--ink2);letter-spacing:0.03em;flex:1;}
-.errbox{margin:0 14px 4px;background:rgba(224,85,85,0.07);border:0.5px solid rgba(224,85,85,0.22);border-radius:10px;padding:9px 13px;font-size:11px;color:var(--red);line-height:1.6;display:none;flex-shrink:0;}
-.errbox.show{display:block;}
-.install-banner{margin:0 14px 4px;background:rgba(201,151,58,0.07);border:0.5px solid rgba(201,151,58,0.2);border-radius:10px;padding:9px 13px;font-size:11px;color:var(--ink2);line-height:1.7;display:none;flex-shrink:0;}
-.install-banner.show{display:block;}
-.install-banner strong{color:var(--goldf);font-weight:500;}
-
-/* ── CONTROLS ── */
-.controls{padding:10px 28px;padding-bottom:max(env(safe-area-inset-bottom,0px),16px);display:flex;align-items:center;justify-content:center;gap:24px;flex-shrink:0;}
-
-.ctrl-btn{
-  width:46px;height:46px;border-radius:50%;
-  background:var(--s1);border:0.5px solid var(--rim);
-  display:flex;align-items:center;justify-content:center;
-  cursor:pointer;color:var(--ink3);font-size:17px;
-  transition:opacity 0.18s, transform 0.18s;
-}
-.ctrl-btn:active{transform:scale(0.88);}
-
-/* ── FIX: hide bottom X when edit panel is active ── */
-.ctrl-btn.hidden{
-  opacity:0;
-  pointer-events:none;
-  transform:scale(0.6);
+.script-float {
+  position: absolute;
+  font-family: 'Noto Nastaliq Urdu', serif;
+  font-size: 120px;
+  opacity: 0.05;
+  animation: floatDrift linear infinite;
+  color: var(--gold);
+  user-select: none;
+  will-change: transform;
 }
 
-.mic-wrap{display:flex;flex-direction:column;align-items:center;gap:7px;}
-.mic-btn{width:76px;height:76px;border-radius:50%;background:var(--s2);border:1.5px solid var(--rim2);display:flex;align-items:center;justify-content:center;cursor:pointer;outline:none;-webkit-appearance:none;transition:all 0.2s;}
-.mic-svg{width:27px;height:27px;fill:var(--ink3);transition:fill 0.2s;}
-.mic-btn.rec{background:rgba(224,85,85,0.09);border-color:var(--red);animation:pulse 1.6s infinite;}
-.mic-btn.rec .mic-svg{fill:var(--red);}
-.mic-btn.proc{border-color:var(--goldd);}
-.mic-btn.proc .mic-svg{fill:var(--gold);}
-.mic-btn.edit-mode{border-color:var(--goldd);background:rgba(201,151,58,0.05);}
-.mic-btn.edit-mode .mic-svg{fill:var(--goldd);}
-@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(224,85,85,0.35);}60%{box-shadow:0 0 0 18px rgba(224,85,85,0);}100%{box-shadow:0 0 0 0 rgba(224,85,85,0);}}
-.mic-btn:active{transform:scale(0.92);}
-.mic-label{font-size:9px;color:var(--ink3);letter-spacing:0.16em;text-transform:uppercase;}
+.script-float.zh {
+  font-family: 'Noto Sans SC', sans-serif;
+  font-size: 100px;
+}
+
+@keyframes floatDrift {
+  0%   { transform: translateY(100vh) rotate(-8deg); opacity: 0; }
+  5%   { opacity: .05; }
+  90%  { opacity: .05; }
+  100% { transform: translateY(-200px) rotate(4deg); opacity: 0; }
+}
+
+.hero-demo-card {
+  margin-top: 48px;
+  background: var(--glass-white);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-lg);
+  padding: 20px;
+  text-align: left;
+  animation: fadeUp .8s .8s both;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-demo-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+}
+
+.demo-label {
+  font-size: 8px;
+  letter-spacing: .24em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.demo-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--jade); animation: blink .9s infinite; }
+
+.demo-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.demo-row:last-child { margin-bottom: 0; }
+
+.demo-lang {
+  font-size: 7px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  padding: 2px 6px;
+  border-radius: 4px;
+  flex-shrink: 0;
+  margin-top: 3px;
+}
+
+.demo-lang.ur { background: rgba(200,186,248,.1); color: var(--ur); border: .5px solid rgba(200,186,248,.2); }
+.demo-lang.zh { background: rgba(245,208,128,.1); color: var(--zh); border: .5px solid rgba(245,208,128,.2); font-family: 'Noto Sans SC',sans-serif; }
+.demo-lang.en { background: rgba(168,200,232,.08); color: var(--en); border: .5px solid rgba(168,200,232,.15); }
+.demo-lang.ro { background: rgba(255,255,255,.04); color: var(--ink3); border: 1px solid var(--glass-border); }
+
+.demo-text {
+  font-size: 13px;
+  color: var(--ink2);
+  line-height: 1.5;
+}
+
+.demo-text.ur {
+  font-family: 'Noto Nastaliq Urdu', serif;
+  font-size: 18px;
+  color: var(--ur);
+  direction: rtl;
+  flex: 1;
+  text-align: right;
+}
+
+.demo-text.zh {
+  font-family: 'Noto Sans SC', sans-serif;
+  color: var(--zh);
+  font-size: 16px;
+  font-weight: 300;
+}
+
+.demo-text.ro { font-style: italic; color: var(--ink3); font-size: 11px; }
+.demo-text.en { color: var(--en); font-size: 11px; }
+
+/* ─── Feature grid 2-col on wider mobile ─── */
+@media (min-width: 480px) {
+  .feature-grid { grid-template-columns: 1fr 1fr; }
+}
+
+/* ─── Ticker ─── */
+.ticker-wrap {
+  overflow: hidden;
+  border-top: .5px solid var(--rim);
+  border-bottom: .5px solid var(--rim);
+  padding: 12px 0;
+  background: var(--bg2);
+}
+
+.ticker-inner {
+  display: flex;
+  gap: 0;
+  width: max-content;
+  animation: ticker 20s linear infinite;
+}
+
+.ticker-item {
+  padding: 0 32px;
+  font-size: 11px;
+  color: var(--ink3);
+  letter-spacing: .1em;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.ticker-item::after {
+  content: '·';
+  color: var(--gold);
+  font-size: 16px;
+}
+
+@keyframes ticker {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+/* ─── Trust badges ─── */
+.trust-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+  padding: 24px;
+  border-bottom: .5px solid var(--rim);
+  background: var(--bg2);
+}
+
+.trust-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  background: var(--glass-white);
+  border: 1px solid var(--glass-border);
+  border-radius: 20px;
+  font-size: 10px;
+  color: var(--ink3);
+  letter-spacing: .06em;
+}
+
+.trust-badge-icon { font-size: 13px; }
+
+/* ─── Inline demo anim ─── */
+@keyframes typeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.typed-cursor {
+  display: inline-block;
+  width: 2px;
+  height: 1.1em;
+  background: var(--gold);
+  margin-left: 2px;
+  animation: blink .7s infinite;
+  vertical-align: text-bottom;
+}
 </style>
 </head>
 <body>
 
-<!-- ══════════ SETUP ══════════ -->
-<div id="setup">
-<div class="setup-inner">
-  <div class="logo-ring">🌉</div>
-  <div class="setup-eyebrow">آواز — Voice Bridge</div>
-  <div class="setup-title">Speak. See. Hear.</div>
-  <div class="setup-langs">
-    <span class="sl ur">اردو</span><span class="s-arr">⇄</span>
-    <span class="sl zh">中文</span><span class="s-arr">⇄</span>
-    <span class="sl en">English</span>
-  </div>
-  <div class="steps-card">
-    <div class="steps-head">One-time setup <span class="free-pill">FREE</span></div>
-    <div class="step-row">
-      <div class="step-n">1</div>
-      <div class="step-text">Go to <a href="https://console.groq.com" target="_blank">console.groq.com</a> — free account, <strong>no card.</strong></div>
-    </div>
-    <div class="step-row">
-      <div class="step-n">2</div>
-      <div class="step-text">Click <strong>API Keys → Create → Copy</strong></div>
-    </div>
-    <div class="step-row">
-      <div class="step-n">3</div>
-      <div class="step-text">Paste below. Stored <strong>only on this device.</strong></div>
-    </div>
-  </div>
-  <div class="key-card">
-    <div class="key-label">Groq API Key</div>
-    <div class="key-field">
-      <input type="password" id="keyInput" class="key-input"
-        placeholder="gsk_xxxxxxxxxxxxxxxxxxxxxxxx"
-        autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false">
-      <button class="eye-btn" onclick="toggleEye()">👁</button>
-    </div>
-  </div>
-  <button class="cta" id="ctaBtn" onclick="saveKey()" disabled>Open آواز →</button>
-  <p class="setup-note">Groq free tier · Works in China ✓ · No card ever · Two-way ⇄</p>
-</div>
-</div>
+<!-- ════════════════════════════════
+     PAGE SHELL (ad rails on desktop)
+════════════════════════════════ -->
+<div class="page-shell" style="flex-direction:column;">
 
-<!-- ══════════ APP ══════════ -->
-<div id="app">
-  <div class="topbar">
-    <div class="tb-brand">
-      <div class="tb-name">آواز</div>
-      <div class="tb-langs">
-        <span class="tb-l ur">اردو</span><div class="tb-dot"></div>
-        <span class="tb-l zh">中文</span><div class="tb-dot"></div>
-        <span class="tb-l en">en</span>
+  <!-- NAV -->
+  <nav class="site-nav" style="position:sticky;top:0;z-index:200;width:100%;">
+    <a href="index.html" class="nav-brand" aria-label="ZabānLink Home">
+      <div class="nav-logo" aria-hidden="true">🌉</div>
+      <span class="nav-name">Zabān<span>Link</span></span>
+    </a>
+    <div class="nav-links">
+      <a href="index.html" class="nav-link">Home</a>
+      <a href="about.html" class="nav-link">About</a>
+      <a href="pricing.html" class="nav-link">Pricing</a>
+      <a href="app.html" class="nav-cta">Open App →</a>
+    </div>
+  </nav>
+
+  <!-- CONTENT ROW -->
+  <div style="display:flex;justify-content:center;flex:1;">
+
+    <!-- LEFT AD RAIL -->
+    <aside class="ad-rail" aria-label="Advertisement">
+      <div class="ad-slot medium" style="width:160px;">
+        <span class="ad-slot-label">Ad</span>
+        <span style="font-size:20px;opacity:.3;">📢</span>
+        <span style="font-size:9px;opacity:.35;text-align:center;line-height:1.6;">Your ad here<br>160×300</span>
       </div>
-    </div>
-    <div class="gear-btn" onclick="resetKey()">⚙</div>
-  </div>
-
-  <div class="lang-bar">
-    <div class="lang-bar-label">I speak</div>
-    <div class="lang-pills">
-      <div class="lang-pill auto-pill active" id="pill-auto" onclick="setLang('auto')">
-        <span class="pill-main">🔮 Auto</span>
-        <span class="pill-sub">detect</span>
+      <div class="ad-slot" style="width:160px;height:250px;">
+        <span class="ad-slot-label">Ad</span>
+        <span style="font-size:20px;opacity:.3;">📢</span>
+        <span style="font-size:9px;opacity:.35;text-align:center;line-height:1.6;">160×250</span>
       </div>
-      <div class="lang-pill ur-pill" id="pill-ur" onclick="setLang('ur')">
-        <span class="pill-main">اردو</span>
-        <span class="pill-sub">urdu</span>
+    </aside>
+
+    <!-- MAIN COLUMN -->
+    <main class="main-col" id="main">
+
+      <!-- ══ HERO ══ -->
+      <section class="hero" aria-label="Hero">
+        <div class="hero-bg" aria-hidden="true"></div>
+        <div class="hero-grid" aria-hidden="true"></div>
+
+        <!-- Floating scripts -->
+        <div class="hero-script-bg" aria-hidden="true">
+          <span class="script-float" style="left:8%;animation-duration:18s;animation-delay:0s;">اردو</span>
+          <span class="script-float zh" style="left:65%;animation-duration:22s;animation-delay:4s;">中文</span>
+          <span class="script-float" style="left:30%;animation-duration:26s;animation-delay:8s;">زبان</span>
+          <span class="script-float zh" style="left:5%;animation-duration:20s;animation-delay:12s;">語言</span>
+          <span class="script-float" style="left:75%;animation-duration:24s;animation-delay:2s;">کلام</span>
+        </div>
+
+        <div class="hero-content">
+          <div class="hero-eyebrow" role="text">
+            <span class="hero-eyebrow-dot" aria-hidden="true"></span>
+            Free · AI-Powered · Real-Time
+          </div>
+
+          <h1 class="hero-title">
+            Speak <em>any</em><br>language,<br>be understood
+          </h1>
+
+          <span class="hero-sub-ur" lang="ur" aria-label="Urdu: Speak and be understood">بولیں اور سمجھے جائیں</span>
+          <span class="hero-sub-zh" lang="zh" aria-label="Chinese: Speak and be understood">说话，被理解</span>
+
+          <p class="hero-desc">
+            ZabānLink bridges <strong style="color:var(--ur)">اردو</strong>,
+            <strong style="color:var(--zh)">中文</strong>, and
+            <strong style="color:var(--en)">English</strong> — real-time voice
+            translation powered by Whisper AI and Llama. Free, private, no app install.
+          </p>
+
+          <div class="hero-actions">
+            <a href="app.html" class="btn-primary" aria-label="Open ZabānLink translator app">
+              🎙 Start Translating Free
+            </a>
+            <a href="#how-it-works" class="btn-ghost">See how it works ↓</a>
+          </div>
+
+          <!-- DEMO CARD -->
+          <div class="hero-demo-card" role="complementary" aria-label="Translation example">
+            <div class="demo-label"><span class="demo-dot" aria-hidden="true"></span>Live translation preview</div>
+            <div class="demo-row">
+              <div class="demo-lang ur" lang="ur">اردو</div>
+              <div class="demo-text ur" lang="ur" id="demoUr">آپ کیسے ہیں؟</div>
+            </div>
+            <div class="demo-row">
+              <div class="demo-lang ro">roman</div>
+              <div class="demo-text ro" id="demoRo">Aap kaisy hain?</div>
+            </div>
+            <div class="demo-row">
+              <div class="demo-lang zh" lang="zh">中文</div>
+              <div class="demo-text zh" lang="zh" id="demoZh">你好吗？</div>
+            </div>
+            <div class="demo-row">
+              <div class="demo-lang en">english</div>
+              <div class="demo-text en" id="demoEn">How are you?</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- floating lang tags at bottom -->
+        <div class="hero-lang-float" aria-hidden="true">
+          <span class="float-tag ur" lang="ur">اردو</span>
+          <span class="float-tag zh" lang="zh">中文</span>
+          <span class="float-tag en">English</span>
+        </div>
+      </section>
+
+      <!-- TICKER -->
+      <div class="ticker-wrap" aria-hidden="true">
+        <div class="ticker-inner">
+          <span class="ticker-item">Urdu ⇄ Chinese</span>
+          <span class="ticker-item" lang="ur">اردو سے چینی</span>
+          <span class="ticker-item" lang="zh">实时翻译</span>
+          <span class="ticker-item">Powered by Whisper AI</span>
+          <span class="ticker-item">Free Forever</span>
+          <span class="ticker-item">No App Install</span>
+          <span class="ticker-item">Urdu ⇄ Chinese</span>
+          <span class="ticker-item" lang="ur">اردو سے چینی</span>
+          <span class="ticker-item" lang="zh">实时翻译</span>
+          <span class="ticker-item">Powered by Whisper AI</span>
+          <span class="ticker-item">Free Forever</span>
+          <span class="ticker-item">No App Install</span>
+        </div>
       </div>
-      <div class="lang-pill zh-pill" id="pill-zh" onclick="setLang('zh')">
-        <span class="pill-main">中文</span>
-        <span class="pill-sub">chinese</span>
+
+      <!-- TRUST BADGES -->
+      <div class="trust-row" aria-label="Trust indicators">
+        <div class="trust-badge"><span class="trust-badge-icon">🔒</span>Private — key on your device</div>
+        <div class="trust-badge"><span class="trust-badge-icon">⚡</span>Whisper large-v3</div>
+        <div class="trust-badge"><span class="trust-badge-icon">🆓</span>100% free · no card</div>
+        <div class="trust-badge"><span class="trust-badge-icon">🌐</span>Works globally</div>
+        <div class="trust-badge"><span class="trust-badge-icon">📱</span>Mobile-first PWA</div>
       </div>
-      <div class="lang-pill en-pill" id="pill-en" onclick="setLang('en')">
-        <span class="pill-main">EN</span>
-        <span class="pill-sub">english</span>
+
+      <!-- ══ STATS ══ -->
+      <section class="section reveal" aria-labelledby="stats-heading">
+        <span id="stats-heading" class="section-label">by the numbers</span>
+        <div class="stats-row" role="list">
+          <div class="stat-item" role="listitem">
+            <span class="stat-num" aria-label="3 languages">3</span>
+            <span class="stat-label">Languages</span>
+          </div>
+          <div class="stat-item" role="listitem">
+            <span class="stat-num" aria-label="4 translations">4</span>
+            <span class="stat-label">Translations<br>per phrase</span>
+          </div>
+          <div class="stat-item" role="listitem">
+            <span class="stat-num" aria-label="0 dollars cost">$0</span>
+            <span class="stat-label">Cost to use</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- ══ FEATURES ══ -->
+      <section class="section reveal" id="features" aria-labelledby="features-heading">
+        <span class="section-label">features</span>
+        <h2 id="features-heading" class="section-title">Everything you<br>need to <em>connect</em></h2>
+        <p class="section-desc">Built for real conversations between Urdu and Chinese speakers — in homes, workplaces, and across borders.</p>
+
+        <div class="feature-grid" role="list">
+          <article class="feat-card reveal" role="listitem">
+            <div class="feat-icon" aria-hidden="true">🎙</div>
+            <h3 class="feat-title">Voice Recognition</h3>
+            <p class="feat-desc">Powered by OpenAI Whisper large-v3 — the world's most accurate multilingual speech recognizer. Handles accents, dialects, and code-switching naturally.</p>
+          </article>
+
+          <article class="feat-card reveal" role="listitem">
+            <div class="feat-icon" aria-hidden="true">⚡</div>
+            <h3 class="feat-title">Instant Translation</h3>
+            <p class="feat-desc">Llama 3.3 70B translates between اردو, 中文, and English simultaneously — all 4 outputs (Urdu, Romanized, Chinese, English) appear in one card.</p>
+          </article>
+
+          <article class="feat-card reveal" role="listitem">
+            <div class="feat-icon" aria-hidden="true">🔊</div>
+            <h3 class="feat-title">Text-to-Speech</h3>
+            <p class="feat-desc">Hear the translation read aloud to the listener in their language. Supports Urdu, Chinese, and English voices. Tap 🔊 to replay any message.</p>
+          </article>
+
+          <article class="feat-card reveal" role="listitem">
+            <div class="feat-icon" aria-hidden="true">🔮</div>
+            <h3 class="feat-title">Auto-Detect</h3>
+            <p class="feat-desc">Don't know which language you're hearing? Auto-detect mode identifies اردو, 中文, and English automatically — including Hindi-script confusion.</p>
+          </article>
+
+          <article class="feat-card reveal" role="listitem">
+            <div class="feat-icon" aria-hidden="true">✏️</div>
+            <h3 class="feat-title">Live Edit Panel</h3>
+            <p class="feat-desc">Review and correct transcriptions before sharing. Edit in any language — translations update live as you type with a 650ms debounce.</p>
+          </article>
+
+          <article class="feat-card reveal" role="listitem">
+            <div class="feat-icon" aria-hidden="true">🔒</div>
+            <h3 class="feat-title">Private by Design</h3>
+            <p class="feat-desc">Your Groq API key stays on your device only. No data is stored on our servers. Conversations never leave your browser session.</p>
+          </article>
+        </div>
+      </section>
+
+      <!-- ══ HOW IT WORKS ══ -->
+      <section class="section reveal" id="how-it-works" aria-labelledby="how-heading">
+        <span class="section-label">how it works</span>
+        <h2 id="how-heading" class="section-title">Up and running<br>in <em>3 steps</em></h2>
+        <p class="section-desc">No downloads, no subscriptions — just a free Groq API key and you're ready to speak across languages.</p>
+
+        <div class="how-steps" role="list">
+          <div class="how-step reveal" role="listitem">
+            <div class="how-num" aria-label="Step 1">1</div>
+            <div class="how-text">
+              <div class="how-label">Get a free Groq API key</div>
+              <div class="how-desc">Visit <strong style="color:var(--goldf)">console.groq.com</strong> — create a free account, click API Keys → Create → Copy. No credit card needed.</div>
+            </div>
+          </div>
+          <div class="how-step reveal" role="listitem">
+            <div class="how-num" aria-label="Step 2">2</div>
+            <div class="how-text">
+              <div class="how-label">Paste your key in setup</div>
+              <div class="how-desc">Open ZabānLink → paste your key. It's stored only in your browser's localStorage — we never see it.</div>
+            </div>
+          </div>
+          <div class="how-step reveal" role="listitem">
+            <div class="how-num" aria-label="Step 3">3</div>
+            <div class="how-text">
+              <div class="how-label">Tap mic and speak</div>
+              <div class="how-desc">Hold the mic button, speak in اردو, 中文, or English. Review the card, tap 🔊 — the other person hears their language instantly.</div>
+            </div>
+          </div>
+        </div>
+
+        <div style="margin-top:24px;text-align:center;">
+          <a href="app.html" class="btn-primary" aria-label="Open the translation app">Start translating free →</a>
+        </div>
+      </section>
+
+      <!-- ══ USE CASES ══ -->
+      <section class="section reveal" id="use-cases" aria-labelledby="use-cases-heading">
+        <span class="section-label">use cases</span>
+        <h2 id="use-cases-heading" class="section-title">Built for real<br><em>connections</em></h2>
+
+        <div class="feature-grid" role="list">
+          <article class="feat-card reveal" role="listitem">
+            <div class="feat-icon" aria-hidden="true">🏗️</div>
+            <h3 class="feat-title">CPEC Projects</h3>
+            <p class="feat-desc">Pakistan-China infrastructure teams communicating on-site without expensive interpreters. Real-time, hands-free.</p>
+          </article>
+          <article class="feat-card reveal" role="listitem">
+            <div class="feat-icon" aria-hidden="true">🛍️</div>
+            <h3 class="feat-title">Trade & Commerce</h3>
+            <p class="feat-desc">Pakistani traders dealing with Chinese suppliers and manufacturers. From market visits to contract negotiations.</p>
+          </article>
+          <article class="feat-card reveal" role="listitem">
+            <div class="feat-icon" aria-hidden="true">🎓</div>
+            <h3 class="feat-title">Education</h3>
+            <p class="feat-desc">Students learning Mandarin or Urdu using real conversation practice. See romanization alongside Nastaliq script.</p>
+          </article>
+          <article class="feat-card reveal" role="listitem">
+            <div class="feat-icon" aria-hidden="true">🏠</div>
+            <h3 class="feat-title">Family & Community</h3>
+            <p class="feat-desc">Helping mixed-language families communicate — parents, children, and in-laws speaking different languages at the dinner table.</p>
+          </article>
+        </div>
+      </section>
+
+      <!-- ══ ABOUT FAISAL ══ -->
+      <section class="section reveal" id="creator" aria-labelledby="creator-heading">
+        <span class="section-label">creator</span>
+        <h2 id="creator-heading" class="section-title">Built by <em>Faisal</em></h2>
+        <div class="creator-card reveal" role="article">
+          <div class="creator-avatar" aria-hidden="true">👨‍💻</div>
+          <div class="creator-info">
+            <div class="creator-name">Faisal</div>
+            <div class="creator-title">Developer & Language Bridge Builder · Karachi, Pakistan</div>
+            <p class="creator-bio">
+              Faisal built ZabānLink to solve a real problem — the language gap between Pakistan and China that affects millions of people every day through CPEC, trade, education, and family ties. As someone passionate about both technology and cross-cultural communication, he combined Whisper AI speech recognition with large language models to create a tool that's free, private, and works anywhere.
+            </p>
+            <p class="creator-bio" style="margin-top:10px;">
+              ZabānLink is his contribution to making the world a little more connected — one conversation at a time.
+            </p>
+            <div class="creator-tags" role="list">
+              <span class="ctag" role="listitem">🇵🇰 Pakistan</span>
+              <span class="ctag" role="listitem">AI Developer</span>
+              <span class="ctag" role="listitem">Whisper API</span>
+              <span class="ctag" role="listitem">Multilingual</span>
+              <span class="ctag" role="listitem">Open Tools</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ══ CTA STRIP ══ -->
+      <section class="section reveal" style="text-align:center;" aria-labelledby="cta-heading">
+        <h2 id="cta-heading" class="section-title" style="margin-bottom:16px;">
+          Ready to<br><em>bridge the gap?</em>
+        </h2>
+        <p class="section-desc" style="margin:0 auto 28px;">
+          Free forever · Whisper AI · No app install · Your key stays private
+        </p>
+        <a href="app.html" class="btn-primary" aria-label="Open ZabānLink translator">🌉 Open ZabānLink →</a>
+        <p style="margin-top:16px;font-size:10px;color:var(--ink4);">Works on iPhone, Android, desktop — any modern browser</p>
+      </section>
+
+      <!-- FOOTER -->
+      <footer class="site-footer" role="contentinfo">
+        <div class="footer-brand" aria-label="ZabānLink">ZabānLink</div>
+        <nav class="footer-links" aria-label="Footer navigation">
+          <a href="index.html" class="footer-link">Home</a>
+          <a href="about.html" class="footer-link">About</a>
+          <a href="pricing.html" class="footer-link">Pricing</a>
+          <a href="app.html" class="footer-link">Translator</a>
+          <a href="setup.html" class="footer-link">Setup</a>
+        </nav>
+        <p class="footer-copy">
+          © 2025 ZabānLink · Built by <a href="about.html">Faisal</a> · Karachi, Pakistan<br>
+          Powered by <a href="https://groq.com" target="_blank" rel="noopener">Groq</a> Whisper + Llama 3.3
+        </p>
+      </footer>
+
+    </main><!-- /main-col -->
+
+    <!-- RIGHT AD RAIL -->
+    <aside class="ad-rail" aria-label="Advertisement">
+      <div class="ad-slot medium" style="width:160px;">
+        <span class="ad-slot-label">Ad</span>
+        <span style="font-size:20px;opacity:.3;">📢</span>
+        <span style="font-size:9px;opacity:.35;text-align:center;line-height:1.6;">160×300</span>
       </div>
-    </div>
-    <div class="mode-badge">⇄ 2-way</div>
-  </div>
+      <div class="ad-slot" style="width:160px;height:250px;">
+        <span class="ad-slot-label">Ad</span>
+        <span style="font-size:20px;opacity:.3;">📢</span>
+        <span style="font-size:9px;opacity:.35;text-align:center;line-height:1.6;">160×250</span>
+      </div>
+    </aside>
 
-  <div class="history" id="history">
-    <div class="empty" id="emptyState">
-      <div class="empty-orb">🎙</div>
-      <div class="empty-title">بولیں · 说吧</div>
-      <div class="empty-hint">speak any language · auto-detected<br>urdu · chinese · english — all translated<br>two-way bridge · hear any language back</div>
-    </div>
-  </div>
+  </div><!-- /content row -->
+</div><!-- /page-shell -->
 
-  <div class="live-panel" id="livePanel">
-    <div class="live-rec-row" id="recRow">
-      <div class="live-rec-dot"></div>
-      <div class="live-rec-label" id="recLabel">listening…</div>
-      <div class="waveform"><div class="wv"></div><div class="wv"></div><div class="wv"></div><div class="wv"></div><div class="wv"></div><div class="wv"></div></div>
-    </div>
-    <div class="live-preview" id="livePreview">
-      <div id="detectedBadge" style="display:none;" class="detected-badge">🔮 detected: <span id="detectedLangName"></span></div>
-      <div class="live-preview-text" id="livePreviewText"></div>
-    </div>
-  </div>
-
-  <div class="edit-panel" id="editPanel">
-    <div class="edit-hdr">
-      <div class="edit-title-txt">✏️ &nbsp;fix transcript — ترمیم</div>
-      <div class="edit-hint-txt" id="editHintTxt">whisper mistake? correct it</div>
-    </div>
-    <div class="edit-body">
-      <div class="edit-ur-label" id="editLangLabel">transcript</div>
-      <textarea id="editTextarea" class="edit-textarea"
-        placeholder="…" rows="3"
-        autocorrect="off" autocapitalize="off" spellcheck="false"></textarea>
-    </div>
-    <div class="edit-foot">
-      <!-- Cancel lives here inside the edit panel — bottom X is hidden during edit mode -->
-      <div class="edit-cancel" onclick="cancelEdit()">✕</div>
-      <button class="edit-go" id="editGoBtn" onclick="confirmEdit()">→ translate all</button>
-    </div>
-  </div>
-
-  <div class="errbox" id="errbox"></div>
-  <div class="install-banner" id="installBanner">
-    💡 <strong>Add to Home Screen:</strong> Safari Share (↑) → "Add to Home Screen"
-  </div>
-
-  <div class="statusbar">
-    <div class="sdot" id="sdot"></div>
-    <div class="smsg" id="smsg">ready — tap mic and speak in any language</div>
-  </div>
-
-  <div class="controls">
-    <!-- X clear button — hidden while edit panel open (edit panel's own ✕ handles cancel) -->
-    <div class="ctrl-btn" id="clearBtn" onclick="clearHistory()">✕</div>
-    <div class="mic-wrap">
-      <button class="mic-btn" id="micBtn" onclick="handleMic()">
-        <svg class="mic-svg" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-          <path d="M12 1a4 4 0 0 1 4 4v6a4 4 0 0 1-8 0V5a4 4 0 0 1 4-4zm0 16a7 7 0 0 0 7-7 1 1 0 0 1 2 0 9 9 0 0 1-8 8.945V21h2a1 1 0 0 1 0 2H9a1 1 0 0 1 0-2h2v-2.055A9 9 0 0 1 3 10a1 1 0 0 1 2 0 7 7 0 0 0 7 7z"/>
-        </svg>
-      </button>
-      <span class="mic-label" id="micLabel">tap to speak</span>
-    </div>
-    <div class="ctrl-btn" onclick="replayLast()">▶</div>
-  </div>
-</div>
-
+<script src="js/shared.js"></script>
 <script>
-'use strict';
-const $=id=>document.getElementById(id);
-const setupEl=$('setup'),appEl=$('app');
-const keyInput=$('keyInput'),ctaBtn=$('ctaBtn');
-const historyEl=$('history');
-const livePanel=$('livePanel'),recLabel=$('recLabel');
-const livePreview=$('livePreview'),livePreviewText=$('livePreviewText');
-const editPanel=$('editPanel'),editTextarea=$('editTextarea'),editGoBtn=$('editGoBtn');
-const errbox=$('errbox'),sdot=$('sdot'),smsg=$('smsg');
-const micBtn=$('micBtn'),micLabel=$('micLabel'),installBanner=$('installBanner');
-const clearBtn=$('clearBtn');
+// ─── Demo card cycling animation ───
+const demos = [
+  { ur:'آپ کیسے ہیں؟', ro:'Aap kaisy hain?', zh:'你好吗？', en:'How are you?' },
+  { ur:'بہت شکریہ', ro:'Bohot shukriya', zh:'非常感谢', en:'Thank you very much' },
+  { ur:'کیا آپ اردو سمجھتے ہیں؟', ro:'Kya aap Urdu samjhte hain?', zh:'你懂乌尔都语吗？', en:'Do you understand Urdu?' },
+  { ur:'ہم مل کر کام کریں گے', ro:'Hum mil kar kaam karein ge', zh:'我们一起工作', en:'We will work together' },
+];
 
-let sourceLang='auto', detectedLang=null;
-
-const WHISPER_LANG={ur:'ur',zh:'zh',en:'en',auto:null};
-const LANG_INFO={
-  ur:{name:'اردو',  nameEn:'Urdu',    dir:'rtl',cls:'ur'},
-  zh:{name:'中文',  nameEn:'Chinese', dir:'ltr',cls:'zh'},
-  en:{name:'English',nameEn:'English',dir:'ltr',cls:'en'},
-};
-const TTS_TARGET={ur:'zh',zh:'ur',en:'zh'};
-
-let groqKey='',mediaRecorder=null,audioChunks=[];
-let isRecording=false,lastBubbleId=null,count=0,ttsTimer=null;
-let pendingTranscript='',pendingSourceLang='';
-
-// ── Boot ──
-document.addEventListener('DOMContentLoaded',()=>{
-  const s=localStorage.getItem('vb_key');
-  if(s&&s.startsWith('gsk_')){groqKey=s;openApp();}
-  setLang(localStorage.getItem('vb_sourcelang')||'auto',true);
-});
-keyInput.addEventListener('input',()=>{ctaBtn.disabled=keyInput.value.trim().length<20;});
-function toggleEye(){keyInput.type=keyInput.type==='password'?'text':'password';}
-function saveKey(){const k=keyInput.value.trim();if(!k)return;groqKey=k;localStorage.setItem('vb_key',k);openApp();}
-function openApp(){
-  setupEl.style.display='none';appEl.style.display='flex';
-  const ios=/iP(hone|ad|od)/.test(navigator.userAgent)&&!window.MSStream;
-  if(ios&&!window.navigator.standalone&&!localStorage.getItem('vb_hint')){
-    installBanner.classList.add('show');localStorage.setItem('vb_hint','1');
-    setTimeout(()=>installBanner.classList.remove('show'),8000);
-  }
-  window.speechSynthesis&&window.speechSynthesis.getVoices();
-}
-function resetKey(){if(!confirm('Change Groq API key?'))return;localStorage.removeItem('vb_key');location.reload();}
-function setSt(type,msg){sdot.className='sdot'+(type?' '+type:'');smsg.textContent=msg;}
-function showErr(msg,ms=6000){errbox.textContent=msg;errbox.classList.add('show');setTimeout(()=>errbox.classList.remove('show'),ms);}
-
-// ── Language selector ──
-function setLang(lang,silent=false){
-  sourceLang=lang;
-  if(!silent)localStorage.setItem('vb_sourcelang',lang);
-  ['auto','ur','zh','en'].forEach(l=>{
-    const p=$(l==='auto'?'pill-auto':'pill-'+l);
-    if(p)p.classList.toggle('active',l===lang);
+let di = 0;
+function cycleDemoCard() {
+  const d = demos[di++ % demos.length];
+  const fields = { demoUr: d.ur, demoRo: d.ro, demoZh: d.zh, demoEn: d.en };
+  Object.entries(fields).forEach(([id, val]) => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.style.opacity = '0';
+    setTimeout(() => { el.textContent = val; el.style.transition = 'opacity .5s'; el.style.opacity = '1'; }, 300);
   });
-  const hints={auto:'ready — tap mic · auto-detect language',ur:'ready — speak اردو · tap mic',zh:'ready — speak 中文 · tap mic',en:'ready — speak English · tap mic'};
-  setSt('',hints[lang]||hints.auto);
 }
-
-// ── Edit mode state — controls bottom X button visibility ──
-function setEditMode(active){
-  // FIX: hide the bottom X when edit panel is open — its own ✕ handles cancel
-  clearBtn.classList.toggle('hidden',active);
-  if(active){
-    micBtn.classList.add('edit-mode');
-    micLabel.textContent='confirm →';
-  } else {
-    micBtn.classList.remove('edit-mode');
-    micLabel.textContent='tap to speak';
-  }
-}
-
-// ── Live panel ──
-function showLivePanel(isRec){
-  livePanel.classList.add('show');
-  livePreview.classList.remove('show');
-  livePreviewText.textContent='';
-  $('detectedBadge').style.display='none';
-  const langName=sourceLang==='auto'?'any language':(LANG_INFO[sourceLang]?.nameEn||sourceLang);
-  recLabel.textContent=isRec?('listening — '+langName):'transcribing…';
-}
-function hideLivePanel(){livePanel.classList.remove('show');}
-
-// ── Edit panel ──
-function showEditPanel(transcript,srcLang){
-  pendingTranscript=transcript;
-  pendingSourceLang=srcLang;
-  editTextarea.value=transcript;
-  editGoBtn.disabled=!transcript.trim();
-
-  editTextarea.className='edit-textarea';
-  if(srcLang==='ur'){editTextarea.classList.add('ur');editTextarea.dir='rtl';}
-  else{editTextarea.dir='ltr';}
-  if(srcLang==='zh')editTextarea.classList.add('zh');
-
-  // FIX: always show correct language name, never "ENGLISH" for non-English
-  const li=LANG_INFO[srcLang]||{name:'Transcript'};
-  $('editLangLabel').textContent=li.name+' transcript';
-  $('editHintTxt').textContent='whisper mistake? correct it';
-
-  editPanel.classList.add('show');
-  setEditMode(true);
-  setSt('proc','review · fix if whisper erred');
-  setTimeout(()=>{
-    editTextarea.focus();
-    const l=editTextarea.value.length;
-    editTextarea.setSelectionRange(l,l);
-  },250);
-}
-function hideEditPanel(){
-  editPanel.classList.remove('show');
-  setEditMode(false);
-}
-editTextarea.addEventListener('input',()=>{editGoBtn.disabled=!editTextarea.value.trim();});
-function cancelEdit(){
-  hideEditPanel();hideLivePanel();
-  pendingTranscript='';pendingSourceLang='';
-  setSt('','ready — tap mic · speak in any language');
-}
-
-// ── Confirm → fetch all translations ──
-async function confirmEdit(){
-  const text=editTextarea.value.trim();
-  if(!text)return;
-  const srcLang=pendingSourceLang||detectedLang||'ur';
-  const wasEdited=(text!==pendingTranscript);
-  hideEditPanel();
-  micBtn.classList.add('proc');
-  micLabel.textContent='translating…';
-  setSt('proc','translating all languages…');
-  editGoBtn.disabled=true;
-  try{
-    const result=await fetchAllTranslations(text,srcLang);
-    micBtn.classList.remove('proc');
-    micLabel.textContent='tap to speak';
-    const ttsLang=TTS_TARGET[srcLang]||'zh';
-    setSt('ok',ttsLang==='zh'?'speaking chinese…':'speaking urdu…');
-    const id=addBubble(result,srcLang,wasEdited);
-    lastBubbleId=id;
-    const ttsText=ttsLang==='zh'?result.zh:result.ur;
-    speakBubble(id,ttsLang,ttsText,()=>setSt('','ready — tap mic · speak in any language'));
-  }catch(e){
-    micBtn.classList.remove('proc');
-    micLabel.textContent='tap to speak';
-    showErr(e.message||'translation error');
-    setSt('','ready — tap mic · speak in any language');
-  }finally{editGoBtn.disabled=false;}
-}
-
-// ── Single LLM call → all 4 outputs ──
-async function fetchAllTranslations(text,srcLang){
-  const srcInfo=LANG_INFO[srcLang]||{nameEn:'Urdu'};
-  const prompt=`You are a precise multilingual translator. The source text is in ${srcInfo.nameEn}.
-
-Source (${srcInfo.nameEn}): "${text}"
-
-Return ONLY a valid JSON object, NO markdown, NO preamble.
-
-- "ur": Urdu Nastaliq script (اردو) — if source is Urdu keep as-is
-- "roman": Phonetic Roman Urdu (Latin letters, how an Urdu speaker pronounces it)
-- "zh": Simplified Chinese
-- "en": English
-
-{"ur":"...","roman":"...","zh":"...","en":"..."}`;
-
-  const resp=await fetch('https://api.groq.com/openai/v1/chat/completions',{
-    method:'POST',
-    headers:{'Authorization':'Bearer '+groqKey,'Content-Type':'application/json'},
-    body:JSON.stringify({model:'llama-3.3-70b-versatile',max_tokens:400,temperature:0.1,messages:[{role:'user',content:prompt}]})
-  });
-  if(resp.status===401)throw new Error('Invalid API key — tap ⚙ to update.');
-  if(resp.status===429)throw new Error('Rate limit hit. Wait and retry.');
-  if(!resp.ok){let m='API error '+resp.status;try{const j=await resp.json();m=j?.error?.message||m;}catch(_){}throw new Error(m);}
-  const data=await resp.json();
-  let txt=(data.choices?.[0]?.message?.content||'').trim();
-  txt=txt.replace(/^```[a-z]*\n?/i,'').replace(/\n?```$/,'').trim();
-  const jMatch=txt.match(/\{[\s\S]*\}/);if(jMatch)txt=jMatch[0];
-  let parsed;
-  try{parsed=JSON.parse(txt);}catch(e){throw new Error('Translation parse error. Try again.');}
-  if(!parsed.ur||!parsed.zh||!parsed.en)throw new Error('Incomplete translation. Try again.');
-  return parsed;
-}
-
-// ── Map Whisper language codes to app codes ──
-// KEY FIX: Hindi (hi) is spoken Urdu — same phonology, different script.
-// Return special sentinel so we can re-transcribe forcing Urdu/Nastaliq script.
-function mapWhisperLang(wLang){
-  if(!wLang)return null;
-  const l=wLang.toLowerCase().trim();
-  if(l==='zh'||l.startsWith('zh-')||l==='chinese'||l==='mandarin')return 'zh';
-  if(l==='ur'||l==='urdu')return 'ur';
-  if(l==='hi'||l==='hindi')return '__hindi__'; // needs re-transcribe
-  if(l==='en'||l==='english')return 'en';
-  return null;
-}
-
-// ── Mic / recording ──
-async function handleMic(){
-  if(editPanel.classList.contains('show')){confirmEdit();return;}
-  if(isRecording){stopRec();return;}
-  try{
-    const stream=await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:true,noiseSuppression:true,sampleRate:16000}});
-    startRec(stream);
-  }catch(e){showErr('Microphone access denied.');}
-}
-function startRec(stream){
-  audioChunks=[];
-  const types=['audio/webm;codecs=opus','audio/webm','audio/mp4','audio/ogg;codecs=opus','audio/ogg'];
-  const mime=types.find(t=>MediaRecorder.isTypeSupported(t))||'';
-  mediaRecorder=new MediaRecorder(stream,mime?{mimeType:mime}:{});
-  mediaRecorder.ondataavailable=e=>{if(e.data&&e.data.size>0)audioChunks.push(e.data);};
-  mediaRecorder.onstop=processAudio;
-  mediaRecorder.start(200);
-  isRecording=true;
-  micBtn.classList.add('rec');
-  micLabel.textContent='tap to stop';
-  showLivePanel(true);
-  setSt('rec','recording — '+(sourceLang==='auto'?'any language':(LANG_INFO[sourceLang]?.nameEn||sourceLang)));
-}
-function stopRec(){
-  if(!mediaRecorder||mediaRecorder.state==='inactive')return;
-  mediaRecorder.stop();
-  mediaRecorder.stream.getTracks().forEach(t=>t.stop());
-  isRecording=false;
-  micBtn.classList.remove('rec');
-  micBtn.classList.add('proc');
-  micLabel.textContent='transcribing…';
-  recLabel.textContent='transcribing with whisper…';
-  setSt('proc','transcribing…');
-}
-
-async function processAudio(){
-  micBtn.classList.remove('proc');
-  micLabel.textContent='tap to speak';
-  if(!audioChunks.length){hideLivePanel();setSt('','ready — tap mic · speak in any language');return;}
-  const mime=mediaRecorder.mimeType||'audio/webm';
-  const ext=mime.includes('mp4')?'m4a':mime.includes('ogg')?'ogg':'webm';
-  const blob=new Blob(audioChunks,{type:mime});
-
-  try{
-    // ── First pass ──
-    const form=new FormData();
-    form.append('file',blob,'rec.'+ext);
-    form.append('model','whisper-large-v3');
-    if(sourceLang!=='auto'){const wl=WHISPER_LANG[sourceLang];if(wl)form.append('language',wl);}
-    form.append('response_format','verbose_json');
-
-    const r1=await fetch('https://api.groq.com/openai/v1/audio/transcriptions',{
-      method:'POST',headers:{Authorization:'Bearer '+groqKey},body:form
-    });
-    if(r1.status===401){hideLivePanel();showErr('Invalid API key. Tap ⚙ to update.');setSt('','ready');return;}
-    if(r1.status===429){hideLivePanel();showErr('Rate limit. Wait and retry.');setSt('','ready');return;}
-    if(!r1.ok){hideLivePanel();let em='Error '+r1.status;try{const j=await r1.json();em=j?.error?.message||em;}catch(_){}showErr(em);setSt('','ready');return;}
-    const d1=await r1.json();
-    let transcript=(d1.text||'').trim();
-    if(!transcript){hideLivePanel();showErr('No speech detected. Try again.');setSt('','ready');return;}
-
-    let actualLang=sourceLang;
-    if(sourceLang==='auto'){
-      const mapped=mapWhisperLang(d1.language||'');
-
-      if(mapped==='__hindi__'){
-        // ── Hindi/Urdu speech detected — re-request forcing Urdu script ──
-        setSt('proc','Urdu/Hindi detected — converting to Urdu script اردو…');
-        recLabel.textContent='converting to Urdu script…';
-        const form2=new FormData();
-        form2.append('file',blob,'rec.'+ext);
-        form2.append('model','whisper-large-v3');
-        form2.append('language','ur'); // force Nastaliq
-        form2.append('response_format','verbose_json');
-        try{
-          const r2=await fetch('https://api.groq.com/openai/v1/audio/transcriptions',{
-            method:'POST',headers:{Authorization:'Bearer '+groqKey},body:form2
-          });
-          if(r2.ok){const d2=await r2.json();const t2=(d2.text||'').trim();if(t2)transcript=t2;}
-        }catch(_){}
-        actualLang='ur'; detectedLang='ur';
-      } else if(mapped){
-        actualLang=mapped; detectedLang=mapped;
-      } else {
-        actualLang=await detectLangViaLLM(transcript); detectedLang=actualLang;
-      }
-
-      // Show badge with correct language name
-      $('detectedLangName').textContent=LANG_INFO[actualLang]?.nameEn||actualLang;
-      $('detectedBadge').style.display='inline-flex';
-    } else {
-      actualLang=sourceLang; detectedLang=sourceLang;
-    }
-
-    // Style preview
-    livePreviewText.className='live-preview-text';
-    if(actualLang==='ur')livePreviewText.classList.add('ur');
-    if(actualLang==='zh')livePreviewText.classList.add('zh');
-    livePreviewText.textContent=transcript;
-    livePreview.classList.add('show');
-    recLabel.textContent='transcribed ✓ — review below';
-    await sleep(400);
-    hideLivePanel();
-    showEditPanel(transcript,actualLang);
-  }catch(e){
-    hideLivePanel();
-    showErr('Network error: '+(e.message||'check connection'));
-    setSt('','ready — tap mic · speak in any language');
-  }
-}
-
-// ── LLM fallback language detector ──
-async function detectLangViaLLM(text){
-  try{
-    const resp=await fetch('https://api.groq.com/openai/v1/chat/completions',{
-      method:'POST',
-      headers:{'Authorization':'Bearer '+groqKey,'Content-Type':'application/json'},
-      body:JSON.stringify({
-        model:'llama-3.3-70b-versatile',max_tokens:10,temperature:0,
-        messages:[{role:'user',content:`What language is this? Reply ONLY one word: "ur" for Urdu or Hindi, "zh" for Chinese, "en" for English.\n\nText: "${text.slice(0,200)}"`}]
-      })
-    });
-    const d=await resp.json();
-    const ans=(d.choices?.[0]?.message?.content||'').trim().toLowerCase();
-    if(ans.includes('zh')||ans.includes('chinese'))return 'zh';
-    if(ans.includes('ur')||ans.includes('urdu')||ans.includes('hindi'))return 'ur';
-    return 'en';
-  }catch(_){return 'ur';}
-}
-
-function sleep(ms){return new Promise(r=>setTimeout(r,ms));}
-
-// ── Edit existing bubble ──
-function editBubble(id){
-  const el=document.querySelector('#'+id+' [data-src-text]');
-  const sl=document.querySelector('#'+id+' [data-src-lang]');
-  if(!el||!sl)return;
-  const text=el.getAttribute('data-src-text');
-  const lang=sl.getAttribute('data-src-lang');
-  const bEl=$(id);if(bEl)bEl.remove();
-  if(!historyEl.querySelector('.bubble'))historyEl.innerHTML=emptyHTML();
-  if(lastBubbleId===id)lastBubbleId=null;
-  showEditPanel(text,lang);
-}
-
-function emptyHTML(){
-  return `<div class="empty" id="emptyState">
-    <div class="empty-orb">🎙</div>
-    <div class="empty-title">بولیں · 说吧</div>
-    <div class="empty-hint">speak any language · auto-detected<br>urdu · chinese · english — all translated<br>two-way bridge · hear any language back</div>
-  </div>`;
-}
-
-// ── Add bubble ──
-function addBubble(result,srcLang,wasEdited=false){
-  const es=$('emptyState');if(es)es.remove();
-  const id='b'+(++count);
-  const time=new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
-  const zhSpans=[...result.zh].map((ch,i)=>`<span class="zh-char" id="${id}-c${i}">${escHtml(ch)}</span>`).join('');
-  const ttsLang=TTS_TARGET[srcLang]||'zh';
-  const dirLabels={ur:`اردو → 中文 · Urdu speaking`,zh:`中文 → اردو · Chinese speaking`,en:`English → اردو & 中文`};
-  const dirCls={ur:'ur-to-zh',zh:'zh-to-ur',en:'en-to-ur'}[srcLang]||'ur-to-zh';
-  const srcTag='<span class="src-tag"> src</span>';
-  const srcText=srcLang==='ur'?result.ur:srcLang==='zh'?result.zh:result.en;
-  const div=document.createElement('div');
-  div.className='bubble';div.id=id;
-  div.innerHTML=`
-    <div class="bcard" id="card-${id}">
-      <div class="bdir-strip ${dirCls}">${dirLabels[srcLang]||dirLabels.ur}</div>
-      <div data-src-text="${escAttr(srcText)}" data-src-lang="${srcLang}" style="display:none"></div>
-      <div class="brow">
-        <div class="brow-flag"><div class="brow-flag-dot ur${srcLang==='ur'?' src':''}"></div></div>
-        <div class="brow-content">
-          <div class="brow-label ur">اردو${srcLang==='ur'?srcTag:''}</div>
-          <div class="brow-text ur">${escHtml(result.ur)}</div>
-        </div>
-      </div>
-      <div class="brow">
-        <div class="brow-flag"><div class="brow-flag-dot ro"></div></div>
-        <div class="brow-content">
-          <div class="brow-label ro">roman urdu</div>
-          <div class="brow-text ro">${escHtml(result.roman||'')}</div>
-        </div>
-      </div>
-      <div class="brow">
-        <div class="brow-flag"><div class="brow-flag-dot zh${srcLang==='zh'?' src':''}"></div></div>
-        <div class="brow-content">
-          <div class="brow-label zh">中文${srcLang==='zh'?srcTag:''}</div>
-          <div class="brow-text zh" id="zht-${id}">${zhSpans}</div>
-        </div>
-        <div class="brow-actions">
-          <div class="icon-btn spk-btn" id="spk-zh-${id}" onclick="replayBubble('${id}','zh')">🔊</div>
-          <div class="icon-btn edt-btn" onclick="editBubble('${id}')">✏️</div>
-        </div>
-      </div>
-      <div class="brow">
-        <div class="brow-flag"><div class="brow-flag-dot en${srcLang==='en'?' src':''}"></div></div>
-        <div class="brow-content">
-          <div class="brow-label en">english${srcLang==='en'?srcTag:''}</div>
-          <div class="brow-text en">${escHtml(result.en)}</div>
-        </div>
-        <div class="brow-actions">
-          <div class="icon-btn spk-btn" id="spk-ur-${id}" onclick="replayBubble('${id}','ur')">🔊</div>
-        </div>
-      </div>
-    </div>
-    <div class="bfoot">
-      <span class="bfoot-time">${time}</span>
-      <span class="bfoot-badge">${wasEdited?'✏ edited · ':''}🔊 auto-played: ${ttsLang==='zh'?'中文':'اردو'}</span>
-    </div>`;
-  historyEl.appendChild(div);
-  historyEl.scrollTop=historyEl.scrollHeight;
-  return id;
-}
-
-function escHtml(s){return(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
-function escAttr(s){return(s||'').replace(/"/g,'&quot;').replace(/'/g,'&#39;');}
-
-// ── TTS ──
-const TTS_LANG_CODE={zh:'zh-CN',ur:'ur-PK',en:'en-US'};
-function replayBubble(id,lang){
-  lang=lang||'zh';
-  let text='';
-  if(lang==='zh'){text=getBubbleZhText(id);}
-  else if(lang==='ur'){const e=document.querySelector('#'+id+' .brow-text.ur');text=e?e.textContent:'';}
-  else{const e=document.querySelector('#'+id+' .brow-text.en');text=e?e.textContent:'';}
-  if(text)speakBubble(id,lang,text,()=>{});
-}
-function getBubbleZhText(id){const e=$('zht-'+id);return e?e.textContent:'';}
-function speakBubble(id,lang,text,onEnd){
-  if(!window.speechSynthesis){onEnd();return;}
-  window.speechSynthesis.cancel();
-  clearHighlight(id);
-  const card=$('card-'+id);card&&card.classList.add('speaking');
-  const spkId=lang==='zh'?'spk-zh-'+id:'spk-ur-'+id;
-  const spk=$(spkId);spk&&spk.classList.add('on');
-  const total=[...text].length;
-  const u=new SpeechSynthesisUtterance(text);
-  const langCode=TTS_LANG_CODE[lang]||'zh-CN';
-  u.lang=langCode;u.rate=0.84;u.pitch=1.0;
-  const vs=window.speechSynthesis.getVoices();
-  const v=vs.find(x=>x.lang===langCode)||vs.find(x=>x.lang.startsWith(langCode.split('-')[0]));
-  if(v)u.voice=v;
-  if(lang==='zh')u.onstart=()=>animateChars(id,total,350/u.rate);
-  u.onend=()=>{clearTimeout(ttsTimer);if(lang==='zh')litAll(id,total);setTimeout(()=>{clearHighlight(id);card&&card.classList.remove('speaking');spk&&spk.classList.remove('on');onEnd();},350);};
-  u.onerror=()=>{clearTimeout(ttsTimer);clearHighlight(id);card&&card.classList.remove('speaking');spk&&spk.classList.remove('on');onEnd();};
-  window.speechSynthesis.speak(u);
-}
-function animateChars(id,total,mpc){let i=0;function next(){if(i>0)unlit(id,i-1);if(i<total){lit(id,i);i++;ttsTimer=setTimeout(next,mpc);}}next();}
-function lit(id,i){const e=$(id+'-c'+i);if(e)e.classList.add('lit');}
-function unlit(id,i){const e=$(id+'-c'+i);if(e)e.classList.remove('lit');}
-function litAll(id,t){for(let i=0;i<t;i++)lit(id,i);}
-function clearHighlight(id){clearTimeout(ttsTimer);const e=$('zht-'+id);if(!e)return;e.querySelectorAll('.zh-char').forEach(c=>c.classList.remove('lit'));}
-function replayLast(){
-  if(!lastBubbleId)return;
-  const strip=document.querySelector('#'+lastBubbleId+' [data-src-lang]');
-  const sl=strip?strip.getAttribute('data-src-lang'):'ur';
-  replayBubble(lastBubbleId,TTS_TARGET[sl]||'zh');
-}
-function clearHistory(){
-  window.speechSynthesis&&window.speechSynthesis.cancel();
-  clearTimeout(ttsTimer);
-  hideEditPanel();hideLivePanel();
-  lastBubbleId=null;count=0;pendingTranscript='';pendingSourceLang='';detectedLang=null;
-  historyEl.innerHTML=emptyHTML();
-  setSt('','ready — tap mic · speak in any language');
-}
-
-window.speechSynthesis&&window.speechSynthesis.getVoices();
-if(window.speechSynthesis)window.speechSynthesis.onvoiceschanged=()=>window.speechSynthesis.getVoices();
+setInterval(cycleDemoCard, 3500);
 </script>
 </body>
 </html>
